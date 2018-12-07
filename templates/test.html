@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>RandomTell</title>
+		<script type="text/javascript" src="static/ajax.js"></script>
+	</head>
+	<body>
+		<h1>Randomness Test</h1>
+		<form action="" method=post enctype=multipart/form-data>
+			<input type="file" name="file">
+			<input type="submit" value="Click to Upload">
+		</form>
+		<br/>
+		<div>Set the amount of sequences: <input type="text" id="amount"></div>
+		<div>Set the length of a sequence: <input type="text" id="length"></div>
+		<br/>
+		<form action="" method=post>
+			<input type="button" value="Start" onclick="postParas()">
+		</form>
+	</body>
+</html>
