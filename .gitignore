@@ -1,0 +1,6 @@
+# Python pyc files
+*.pyc
+
+# Uploaded files
+/uploads/*
+!/uploads/example
