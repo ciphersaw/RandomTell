@@ -20,6 +20,10 @@ file_path = ''
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+@app.route('/')
+def index():
+    return redirect(url_for('randomness_test'))
+
 @app.route('/test', methods = ['GET', 'POST'])
 def randomness_test():
 	global file_path
