@@ -9,7 +9,8 @@ def _init():
 		'epsilon': [],
 		'p_value_dict' : {
 			'frequency': []
-		}
+		},
+		'is_selected': {}
 	}
 
 def set_value(key,value):

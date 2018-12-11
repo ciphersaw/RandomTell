@@ -22,7 +22,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
-    return redirect(url_for('randomness_test'))
+	return redirect(url_for('randomness_test'))
 
 @app.route('/test', methods = ['GET', 'POST'])
 def randomness_test():
@@ -30,19 +30,17 @@ def randomness_test():
 	if request.method == 'POST':
 		if 'file' in request.files:
 			file = request.files['file']
-			filename = secure_filename(file.filename)
-			file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+			file_name = secure_filename(file.filename)
+			file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
 			file.save(file_path)
-			return redirect(url_for('randomness_test', filename = filename))
-		elif 'start' in request.form:
+			return 'Upload the file successfully.'
+		elif 'start' in request.json:
 			clear_list_in_dict(p_value_dict)
-			if 'filename' in request.args:
-				filename = secure_filename(request.args.get('filename'))
-				file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-			myglobals.set_value('amount', int(request.form['amount']))
-			myglobals.set_value('length', int(request.form['length']))
+			myglobals.set_value('amount', int(request.json['amount']))
+			myglobals.set_value('length', int(request.json['length']))
+			myglobals.set_value('is_selected', request.json['isSelected'])
 			start_random_tell(file_path)
-			return "Complete!"
+			return 'Upload the parameters successfully and complete the tests.'
 	return render_template('test.html')
 
 @app.route('/result')
@@ -50,4 +48,4 @@ def result_display():
 	return render_template('result.html', p_value_dict = p_value_dict)
 
 if __name__ == '__main__':
-	app.run(debug = True)
+	app.run(debug=True)
