@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Randomness Test Online Tool">
+		<meta name="author" content="CipherSaw">
+		<link rel="icon" href="{{ url_for('static', filename='imgs/favicon.ico') }}">
+
+		<title>RandomTell | Randomness Test Online Tool</title>
+
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+		<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}">
+
+		<style type="text/css">
+			body {
+				background: #6e6057;
+				font-family: sans-serif;
+			}
+			.navbar {
+				background: #1a100a;
+				color: #fff;
+			}
+			#brand {
+				display: inline-block;
+				width: 20px;
+				height: 20px;
+				margin-right: 10px;
+			}
+			footer {
+				background: #1a100a;
+				color: #fff;
+				font-size: 15px;
+				padding: 20px 0;
+				text-align: center;
+				display: justify;
+				justify-content: center;
+				margin-top: 40px;
+			}
+		</style>
+		{% block css %}
+
+		{% endblock %}
+	</head>
+
+	<body>
+		{% include "common/header.html" %}
+
+		<div class="container">
+			{% block content %}
+
+			{% endblock %}
+		</div>
+
+		{% include "common/footer.html" %}
+
+		{% block js %}
+		<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+		{% endblock %}
+	</body>
+</html>

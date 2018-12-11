@@ -1,22 +1,283 @@
-<!DOCTYPE html>
+{% extends "common/base.html" %}
 
-<html>
-	<head>
-		<title>RandomTell</title>
-		<script type="text/javascript" src="static/ajax.js"></script>
-	</head>
-	<body>
-		<h1>Randomness Test</h1>
-		<form action="" method=post enctype=multipart/form-data>
-			<input type="file" name="file">
-			<input type="submit" value="Click to Upload">
+{% block css %}
+<style type="text/css">
+	/* General */
+	.test-step{
+		padding: 0px;
+		margin-top: 100px;
+		background: #3d312c;
+		border-radius: 10px;
+		color: #fff;
+	}
+	.step-title {
+		font-size: 20px;
+		font-weight: bold;
+		margin-bottom: 20px;
+		margin-top: 10px;
+	}
+
+	/* Step 1 */
+	#file-form {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+	}
+	.btn-uploadfile {
+		height: 34px;
+		width: 120px;
+		color: #fff;
+		background-color: #3b1f14;
+		margin: 0px;
+		border: 1px solid #3b1f14;
+		border-radius: 5px;
+		cursor: pointer;
+		line-height: 34px;
+	} 
+	.btn-uploadfile:hover {
+		color: #fff;
+		background-color: #ca9681;
+		text-decoration: none;
+	}
+	/* Self-defined style of input */
+	#custom-fileinput {
+		display: inline-block;
+		height: 34px;
+		margin: 0;
+	}
+	#custom-fileinput {
+		margin-right: 50px;
+		width: 120px;
+		line-height: 34px;
+		border: 1px solid #3b1f14;
+		border-radius: 5px;
+		color: #fff;
+		background-color: #3b1f14;
+		cursor: pointer;
+	}
+	#custom-fileinput:hover {
+		margin-right: 50px;
+		width: 120px;
+		line-height: 34px;
+		border: 1px solid #ca9681;
+		border-radius: 5px;
+		color: #fff;
+		background-color: #ca9681;
+		cursor: pointer;
+	}
+	#origin-fileinput {
+		width: 120px;
+		height: 34px;
+		opacity: 0;
+		position: relative;
+		top: -34px;
+		display: inline-block;
+	}
+	#showfilename {
+		display: block;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		text-align: center;
+	}
+
+	/* Step 2 */
+	.step2 {
+		margin-top: 50px;
+	}
+	.checkbox {
+		margin-top: 0px;
+	}
+
+	/* Step 3 */
+	.step3 {
+		margin-top: 50px; 
+	}
+
+	/* Start */
+	#submit-btn {
+		margin-top: 20px;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="test-step step1">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<p class="step-title">Step 1&nbsp;&nbsp;&nbsp;Upload File</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<form id="file-form">
+				<div id="custom-fileinput">
+					Select File
+					<input type="file" name="file" id="origin-fileinput"/>
+				</div>
+				<div class="btn-uploadfile" id="uploadfile-btn">Cilck to Upload</div>
+			</form>
+			<span id="showfilename">You have not select the file</span>
+		</div>
+	</div>
+	<!-- Progress bar and prompt box of not selecting file -->
+	<div class="row">
+		<div class="col-sm-12" id="prograss-container">
+		</div>
+	</div>
+</div>
+
+<div class="test-step step2">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<p class="step-title">Step 2&nbsp;&nbsp;&nbsp;Select Tests</p>
+		</div>
+	</div>
+	<div class="row">
+		<form id="testProps-form">
+			<div class="row">
+				<div class="col-sm-12 col-md-12 col-lg-12 text-center">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="frequencyTest" checked>Frequency Test
+						</label>
+					</div>
+				</div>
+			</div>
 		</form>
-		<br/>
-		<div>Set the amount of sequences: <input type="text" id="amount"></div>
-		<div>Set the length of a sequence: <input type="text" id="length"></div>
-		<br/>
-		<form action="" method=post>
-			<input type="button" value="Start" onclick="postParas()">
-		</form>
-	</body>
-</html>
+	</div>
+</div>
+
+<div class="test-step step3">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<p class="step-title">Step 3&nbsp;&nbsp;&nbsp;Parameters Setting</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 col-md-12 col-lg-12 text-center">
+			<form action="" method="post" id="subForm">
+				<p>Amount of sequences: <input type="text" name="amount" id="amount" style="color: black"/></p>
+				<p>Length of a sequence: <input type="text" name="length" id="length" style="color: black"/></p>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-12 text-center">
+		<input class="btn btn-primary" type="button" value="Start" id="submit-btn"/>
+	</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+<script type="text/javascript">
+	// Use AJAX to upload file by jQuery
+	function uploadFile() {
+		var xhrOnProgess = function(func) {
+			// Bind progress listener
+			xhrOnProgess.onprogress = func; 
+			return function() {
+				var xhr = $.ajaxSettings.xhr();
+				if (typeof xhrOnProgess.onprogress !== 'function') {
+					return xhr;
+				}
+				if (xhrOnProgess.onprogress && xhr.upload) {
+					xhr.upload.onprogress = xhrOnProgess.onprogress;
+				}
+				return xhr;
+			};
+		};
+		var file = $("#origin-fileinput")[0].files[0];
+		var form = new FormData();
+		form.append('file', file);
+		$.ajax({
+			type: 'POST',
+			url: '/test',
+			data: form,
+			processData: false,
+			contentType: false,
+			xhr: xhrOnProgess(function(e) {
+				percent = e.loaded / e.total;
+				percentDisplay = parseInt((e.loaded / e.total) * 100) + '%';
+				var width = $("#prograss-container").width();
+				$("#prograss-bar").css("width", (percent * width));
+				$("#prograss-bar").html(percentDisplay);
+			}),
+			success: function(data) {
+			},
+		});
+	}
+
+	// Submit parameters and start tests
+	function postParas() {
+		var start = ""
+		var amount = document.getElementById("amount").value;
+		var length = document.getElementById("length").value;
+		var isSelected = new Object()
+		isSelected.frequencyTest = document.getElementById("frequencyTest").checked === true ? 1 : 0;
+		var postData = {
+			amount: amount,
+			length: length,
+			isSelected: isSelected,
+			start: ""
+		};
+		$.ajax({
+			type: 'POST',
+			url: '/test',
+			data: JSON.stringify(postData),
+			contentType: 'application/json; charset=utf-8',
+			success: function(data) {
+				window.location.href = "http://" + window.location.host + "/result";
+			},
+		});
+	}
+	
+	$(document).ready(function() {
+		// Show the file path
+		$("#origin-fileinput").change(function() {
+			var filePath = $(this).val();
+			$("#showfilename").html(filePath);
+		});
+
+		// Cilck to upload
+		$("#uploadfile-btn").click(function(e) {
+			// Judge if select the file
+			e.preventDefault();
+			var fileInputVal = $("#origin-fileinput").val();
+			if (!fileInputVal) { 
+				// Display the prompt box of not selecting file
+				var warningContent = 
+				'<div class="alert alert-warning alert-dismissible" role="alert" style="text-align: center">' + 
+					'<button type="button" class="close" data-dismiss="alert" aria-label="Close">' + 
+						'<span aria-hidden="true">' + `&times;` + '</span>' + 
+					'</button>' + 
+					'<strong>' + 'Warning!&nbsp;&nbsp;' + '</strong>' + 
+					'Please select the file you will upload first.' +
+				'</div>';
+				$("#prograss-container").html(warningContent);
+			} else {
+				// Display the progress bar with 0%
+				var prograssContent = 
+				'<div class="progress" id="prograss-container">' + 
+					'<div id="prograss-bar" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">' +
+						'0%' +
+					'</div>' +
+				'</div>';
+				$("#prograss-container").html(prograssContent);
+				// Start uploading
+				uploadFile();
+			}
+		});
+
+		// Click the button to post parameters
+		$("#submit-btn").click(function(e) {
+			e.preventDefault();
+			postParas();
+		});
+	});
+</script>
+{% endblock %}

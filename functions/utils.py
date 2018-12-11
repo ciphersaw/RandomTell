@@ -27,7 +27,9 @@ def read_in_ascii_format(file):
 
 def test_suite():
 	length = get_value('length')
-	frequency(length)
+	is_selected = get_value('is_selected')
+	if is_selected['frequencyTest']:
+		frequency(length)
 
 def clear_list_in_dict(d):
 	for key in d:
