@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+
 from functions.tests import *
 from functions.myglobals import *
 
@@ -28,8 +29,11 @@ def read_in_ascii_format(file):
 def test_suite():
 	length = get_value('length')
 	is_selected = get_value('is_selected')
+	block_length_of_frequency_within_a_block = get_value('block_length_of_frequency_within_a_block')
 	if is_selected['frequencyTest']:
 		frequency(length)
+	if is_selected['frequencyTestWithinABlock']:
+		frequency_within_a_block(block_length_of_frequency_within_a_block, length)
 
 def clear_list_in_dict(d):
 	for key in d:

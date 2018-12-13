@@ -6,9 +6,11 @@ def _init():
 	_global_dict = {
 		'amount': 0, 
 		'length': 0,
+		'block_length_of_frequency_within_a_block': 0,
 		'epsilon': [],
 		'p_value_dict' : {
-			'frequency': []
+			'frequency': [],
+			'frequency_within_a_block': []
 		},
 		'is_selected': {}
 	}

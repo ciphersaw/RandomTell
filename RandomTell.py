@@ -38,6 +38,7 @@ def randomness_test():
 			clear_list_in_dict(p_value_dict)
 			myglobals.set_value('amount', int(request.json['amount']))
 			myglobals.set_value('length', int(request.json['length']))
+			myglobals.set_value('block_length_of_frequency_within_a_block', int(request.json['blockLengthOfFTWAB']))
 			myglobals.set_value('is_selected', request.json['isSelected'])
 			start_random_tell(file_path)
 			return 'Upload the parameters successfully and complete the tests.'
