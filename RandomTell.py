@@ -5,13 +5,11 @@ __author__ = 'Cipher Saw'
 
 from flask import Flask, request, redirect, url_for, render_template
 from werkzeug import secure_filename
-from functions.tests import *
 from functions.utils import *
-from functions import myglobals
 import os
 
-myglobals._init()
-p_value_dict = myglobals.get_value('p_value_dict')
+global_variables_initialization()
+p_value_dict = get_value('p_value_dict')
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -36,10 +34,10 @@ def randomness_test():
 			return 'Upload the file successfully.'
 		elif 'start' in request.json:
 			clear_list_in_dict(p_value_dict)
-			myglobals.set_value('amount', int(request.json['amount']))
-			myglobals.set_value('length', int(request.json['length']))
-			myglobals.set_value('block_length_of_frequency_within_a_block', int(request.json['blockLengthOfFTWAB']))
-			myglobals.set_value('is_selected', request.json['isSelected'])
+			set_value('amount', int(request.json['amount']))
+			set_value('length', int(request.json['length']))
+			set_value('block_length_of_frequency_within_a_block', int(request.json['blockLengthOfFTWAB']))
+			set_value('is_selected', request.json['isSelected'])
 			start_random_tell(file_path)
 			return 'Upload the parameters successfully and complete the tests.'
 	return render_template('test.html')

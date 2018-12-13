@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from functions.tests import *
-from functions.myglobals import *
 
 def start_random_tell(file_path):
 	with open(file_path, 'r') as file:

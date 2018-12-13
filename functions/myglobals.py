@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-def _init():
+def global_variables_initialization():
 	global _global_dict
 	_global_dict = {
 		'amount': 0, 
