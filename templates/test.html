@@ -146,6 +146,11 @@
 							<input type="checkbox" id="frequencyTestWithinABlock" checked>Frequency Test within a Block
 						</label>						
 					</div>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" id="runsTest" checked>Runs Test
+						</label>						
+					</div>
 				</div>
 			</div>
 		</form>
@@ -226,7 +231,8 @@
 		var blockLengthOfFTWAB = document.getElementById("blockLengthOfFTWAB").value;
 		var isSelected = new Object()
 		isSelected.frequencyTest = document.getElementById("frequencyTest").checked === true ? 1 : 0;
-		isSelected.frequencyTestWithinABlock = document.getElementById("frequencyTestWithinABlock").checked === true ? 1 : 0;		
+		isSelected.frequencyTestWithinABlock = document.getElementById("frequencyTestWithinABlock").checked === true ? 1 : 0;
+		isSelected.runsTest = document.getElementById("runsTest").checked === true ? 1 : 0;
 		var postData = {
 			amount: amount,
 			length: length,

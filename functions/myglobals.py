@@ -10,7 +10,8 @@ def global_variables_initialization():
 		'epsilon': [],
 		'p_value_dict' : {
 			'frequency': [],
-			'frequency_within_a_block': []
+			'frequency_within_a_block': [],
+			'runs': []
 		},
 		'is_selected': {}
 	}

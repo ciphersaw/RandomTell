@@ -33,6 +33,8 @@ def test_suite():
 		frequency(length)
 	if is_selected['frequencyTestWithinABlock']:
 		frequency_within_a_block(block_length_of_frequency_within_a_block, length)
+	if is_selected['runsTest']:
+		runs(length)
 
 def clear_list_in_dict(d):
 	for key in d:
