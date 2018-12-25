@@ -11,7 +11,8 @@ def global_variables_initialization():
 		'p_value_dict' : {
 			'frequency': [],
 			'frequency_within_a_block': [],
-			'runs': []
+			'runs': [],
+			'longest_run_of_ones_in_a_block': []
 		},
 		'is_selected': {}
 	}
