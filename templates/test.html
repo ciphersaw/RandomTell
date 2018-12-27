@@ -23,22 +23,6 @@
 		flex-direction: row;
 		justify-content: center;
 	}
-	.btn-uploadfile {
-		height: 34px;
-		width: 120px;
-		color: #fff;
-		background-color: #3b1f14;
-		margin: 0px;
-		border: 1px solid #3b1f14;
-		border-radius: 5px;
-		cursor: pointer;
-		line-height: 34px;
-	} 
-	.btn-uploadfile:hover {
-		color: #fff;
-		background-color: #ca9681;
-		text-decoration: none;
-	}
 	/* Self-defined style of input */
 	#custom-fileinput {
 		display: inline-block;
@@ -46,7 +30,6 @@
 		margin: 0;
 	}
 	#custom-fileinput {
-		margin-right: 50px;
 		width: 120px;
 		line-height: 34px;
 		border: 1px solid #3b1f14;
@@ -56,7 +39,6 @@
 		cursor: pointer;
 	}
 	#custom-fileinput:hover {
-		margin-right: 50px;
 		width: 120px;
 		line-height: 34px;
 		border: 1px solid #ca9681;
@@ -114,15 +96,13 @@
 					Select File
 					<input type="file" name="file" id="origin-fileinput"/>
 				</div>
-				<div class="btn-uploadfile" id="uploadfile-btn">Cilck to Upload</div>
 			</form>
 			<span id="showfilename">You have not select the file</span>
 		</div>
 	</div>
 	<!-- Progress bar and prompt box of not selecting file -->
 	<div class="row">
-		<div class="col-sm-12" id="prograss-container">
-		</div>
+		<div class="col-sm-12" id="progress-container"></div>
 	</div>
 </div>
 
@@ -191,6 +171,9 @@
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 
 <script type="text/javascript">
+	// Global flags
+	var fileUploadSuccess = false;
+
 	// Use AJAX to upload file by jQuery
 	function uploadFile() {
 		var xhrOnProgess = function(func) {
@@ -219,12 +202,13 @@
 			xhr: xhrOnProgess(function(e) {
 				percent = e.loaded / e.total;
 				percentDisplay = parseInt((e.loaded / e.total) * 100) + '%';
-				var width = $("#prograss-container").width();
-				$("#prograss-bar").css("width", (percent * width));
-				$("#prograss-bar").html(percentDisplay);
+				var width = $("#progress-container").width();
+				$("#progress-bar").css("width", (percent * width));
+				$("#progress-bar").html(percentDisplay);
 			}),
 			success: function(data) {
-			},
+				fileUploadSuccess = true;
+						},
 		});
 	}
 
@@ -234,7 +218,7 @@
 		var amount = document.getElementById("amount").value;
 		var length = document.getElementById("length").value;
 		var blockLengthOfFTWAB = document.getElementById("blockLengthOfFTWAB").value;
-		var isSelected = new Object()
+		var isSelected = new Object();
 		isSelected.frequencyTest = document.getElementById("frequencyTest").checked === true ? 1 : 0;
 		isSelected.frequencyTestWithinABlock = document.getElementById("frequencyTestWithinABlock").checked === true ? 1 : 0;
 		isSelected.runsTest = document.getElementById("runsTest").checked === true ? 1 : 0;
@@ -259,17 +243,25 @@
 	
 	// Event listeners in jQuery
 	$(document).ready(function() {
-		// Show the file path
-		$("#origin-fileinput").change(function() {
+		// Show the file path and upload file
+		$("#origin-fileinput").change(function(e) {
 			var filePath = $(this).val();
-			$("#showfilename").html(filePath);
-		});
-		// Cilck to upload
-		$("#uploadfile-btn").click(function(e) {
-			// Judge if select the file
-			e.preventDefault();
-			var fileInputVal = $("#origin-fileinput").val();
-			if (!fileInputVal) { 
+			if (filePath) {
+				$("#showfilename").html(filePath);
+				e.preventDefault();
+				// Display the progress bar with 0%
+				var progressContent = 
+				'<div class="progress" id="progress">' + 
+					'<div id="progress-bar" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">' +
+						'0%' +
+					'</div>' +
+				'</div>';
+				$("#progress-container").html(progressContent);
+				// Start uploading
+				uploadFile();
+				// Hack the problem --- file type input cannot trigger change event for the same file.
+				$('#origin-fileinput').val('');
+			} else {
 				// Display the prompt box of not selecting file
 				var warningContent = 
 				'<div class="alert alert-warning alert-dismissible" role="alert" style="text-align: center">' + 
@@ -279,24 +271,27 @@
 					'<strong>' + 'Warning!&nbsp;&nbsp;' + '</strong>' + 
 					'Please select the file you will upload first.' +
 				'</div>';
-				$("#prograss-container").html(warningContent);
-			} else {
-				// Display the progress bar with 0%
-				var prograssContent = 
-				'<div class="progress" id="prograss-container">' + 
-					'<div id="prograss-bar" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">' +
-						'0%' +
-					'</div>' +
-				'</div>';
-				$("#prograss-container").html(prograssContent);
-				// Start uploading
-				uploadFile();
+				$("#progress-container").html(warningContent);
+				return;
 			}
 		});
 		// Click the button to post parameters
 		$("#submit-btn").click(function(e) {
 			e.preventDefault();
-			postParas();
+			if (fileUploadSuccess) {
+				postParas();
+			} else {
+				// Display the prompt box of not selecting file
+				var warningContent = 
+				'<div class="alert alert-warning alert-dismissible" role="alert" style="text-align: center">' + 
+					'<button type="button" class="close" data-dismiss="alert" aria-label="Close">' + 
+						'<span aria-hidden="true">' + `&times;` + '</span>' + 
+					'</button>' + 
+					'<strong>' + 'Warning!&nbsp;&nbsp;' + '</strong>' + 
+					'Please select the file you will upload first.' +
+				'</div>';
+				$("#progress-container").html(warningContent);
+			}
 		});
 	});
 </script>
