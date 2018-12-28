@@ -74,6 +74,40 @@
 	.step3 {
 		margin-top: 50px; 
 	}
+	/* Custom Bootstrap3 input form-control focus outline style */
+	.customErrorInput {
+		display: block;
+		width: 100%;
+		height: 34px;
+		padding: 6px 12px;
+		font-size: 14px;
+		line-height: 1.42857143;
+		color: #555;
+		background-color: #fff;
+		background-image: none;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		border-color: red;
+    	outline: 0;
+    	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(223, 15, 50, 0.884);
+    	box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(223, 15, 50, 0.884);
+		-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+		-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+		transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	}
+	.errorTipHide {
+		margin-left: 10px;
+		opacity: 0;
+	}
+	.errorTipDisplay {
+		margin-left: 10px;
+		opacity: 1;
+		color:  rgba(223, 15, 50, 0.884);
+		text-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(223, 15, 50, 0.884);
+		-webkit-transition: opacity ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+		-o-transition: opacity ease-in-out .15s,text-shadow ease-in-out .15s;
+		transition: opacity ease-in-out .15s,text-shadow ease-in-out .15s;
+	}
 
 	/* Start */
 	#submit-btn {
@@ -144,6 +178,10 @@
 			</div>
 		</form>
 	</div>
+	<!-- Give warning prompt box if none test selected -->
+	<div class="row">
+		<div class="col-sm-12" id="prompt-container"></div>
+	</div>
 </div>
 
 <div class="test-step step3">
@@ -153,40 +191,40 @@
 		</div>
 	</div>
 	<div class="row" style="margin-left: 0px; margin-right: 0px">
-		<div class="col-xs-2 col-sm-3 col-md-3 col-lg-3"></div>
-		<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3 text-right">
+		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-2"></div>
+		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 text-right">
 			<span>Amount of sequences :</span>
 		</div>
-		<div class="col-xs-5 col-sm-4 col-md-4 col-lg-4">
-			<span>
-				<input type="text" name="amount" id="amount" style="color: black"/>						
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			<span style="display: inline-block">
+				<input type="text" class="form-control" name="amount" id="amount" style="color: black" placeholder="Input amount"/>						
 			</span>
+			<span class="errorTipHide">* Please input a positive integer</span>
 		</div>
-		<div class="col-xs-1 col-sm-2 col-md-2 col-lg-2"></div>
 	</div>
 	<div class="row" style="margin-left: 0px; margin-right: 0px; margin-top: 15px">
-		<div class="col-xs-2 col-sm-3 col-md-3 col-lg-3"></div>
-		<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3 text-right">
+		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-2"></div>
+		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 text-right">
 			<span>Length of a sequence :</span>
 		</div>
-		<div class="col-xs-5 col-sm-4 col-md-4 col-lg-4">
-			<span>
-				<input type="text" name="length" id="length" style="color: black"/>					
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			<span style="display: inline-block">
+				<input type="text" class="form-control" name="length" id="length" style="color: black" placeholder="Input length"/>					
 			</span>
+			<span class="errorTipHide">* Please input a positive integer</span>
 		</div>
-		<div class="col-xs-1 col-sm-2 col-md-2 col-lg-2"></div>
 	</div>
 	<div class="row" style="margin: 15px 0px 0px 0px">
 		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-2"></div>
 		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 text-right">
 			<span>Block length of frequency test within a block :</span>
 		</div>
-		<div class="col-xs-5 col-sm-5 col-md-4 col-lg-4">
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 			<span style="display: inline-block; margin-bottom: 10px">
-				<input type="text" name="blockLengthOfFTWAB" id="blockLengthOfFTWAB" style="color: black"/>					
+				<input type="text" class="form-control" name="blockLengthOfFTWAB" id="blockLengthOfFTWAB" style="color: black" placeholder="Input block length"/>				
 			</span>
+			<span class="errorTipHide">* Please input a positive integer</span>
 		</div>
-		<div class="col-xs-1 col-sm-1 col-md-2 col-lg-2"></div>
 	</div>
 </div>
 
@@ -244,23 +282,7 @@
 	}
 
 	// Submit parameters and start tests
-	function postParas() {
-		var start = ""
-		var amount = document.getElementById("amount").value;
-		var length = document.getElementById("length").value;
-		var blockLengthOfFTWAB = document.getElementById("blockLengthOfFTWAB").value;
-		var isSelected = new Object();
-		isSelected.frequencyTest = document.getElementById("frequencyTest").checked === true ? 1 : 0;
-		isSelected.frequencyTestWithinABlock = document.getElementById("frequencyTestWithinABlock").checked === true ? 1 : 0;
-		isSelected.runsTest = document.getElementById("runsTest").checked === true ? 1 : 0;
-		isSelected.longestRunOfOnesInABlock = document.getElementById("longestRunOfOnesInABlock").checked === true ? 1 : 0;
-		var postData = {
-			amount: amount,
-			length: length,
-			blockLengthOfFTWAB: blockLengthOfFTWAB,
-			isSelected: isSelected,
-			start: ""
-		};
+	function postParas(postData) {
 		$.ajax({
 			type: 'POST',
 			url: '/test',
@@ -270,6 +292,83 @@
 				window.location.href = "http://" + window.location.host + "/result";
 			},
 		});
+	}
+
+	// Test positive integer string
+	function testPositiveInteger(str) {
+		var reg = /^[1-9][0-9]*$/;
+		return reg.test(str);
+	}
+
+	// Verify input and give error tips
+	function veryfyInput() {
+		var value = $(this).val();
+		var isPositveInteger= testPositiveInteger(value);
+		if (!isPositveInteger) {
+			$(this).removeClass('form-control');
+			$(this).addClass('customErrorInput');
+			$(this).parent().next().removeClass('errorTipHide');
+			$(this).parent().next().addClass('errorTipDisplay');
+		} else {
+			$(this).removeClass('customErrorInput');
+			$(this).addClass('form-control');
+			$(this).parent().next().removeClass('errorTipDisplay');
+			$(this).parent().next().addClass('errorTipHide');
+		}
+	}
+
+	// Handle params to be upload
+	function handleParams() {
+		var start = ""
+		var amount = parseInt(document.getElementById("amount").value);
+		var length = parseInt(document.getElementById("length").value);
+		var blockLengthOfFTWAB = parseInt(document.getElementById("blockLengthOfFTWAB").value);
+		var isSelected = new Object();
+		isSelected.frequencyTest = document.getElementById("frequencyTest").checked === true ? 1 : 0;
+		isSelected.frequencyTestWithinABlock = document.getElementById("frequencyTestWithinABlock").checked === true ? 1 : 0;
+		isSelected.runsTest = document.getElementById("runsTest").checked === true ? 1 : 0;
+		isSelected.longestRunOfOnesInABlock = document.getElementById("longestRunOfOnesInABlock").checked === true ? 1 : 0;
+		// If none test selected in step 2, give warning
+		var testCount = 0;
+		for (var test in isSelected) {
+			testCount += isSelected[test];
+		}
+		if (!testCount) {
+			// Display the prompt box if none test selected
+			var warningContent = 
+				'<div class="alert alert-warning alert-dismissible" role="alert" style="text-align: center">' + 
+					'<button type="button" class="close" data-dismiss="alert" aria-label="Close">' + 
+						'<span aria-hidden="true">' + `&times;` + '</span>' + 
+					'</button>' + 
+					'<strong>' + 'Warning!&nbsp;&nbsp;' + '</strong>' + 
+					'Please select at least one test.' +
+				'</div>';
+				$("#prompt-container").html(warningContent);
+		} else {
+			var warningContent = '';
+			$("#prompt-container").html(warningContent);
+		}
+		// If no input parameters in step 3, give tips
+		if (!amount) {
+			$('#amount').addClass('customErrorInput');
+			$('#amount').parent().next().addClass('errorTipDisplay');
+		};
+		if (!length) {
+			$('#length').addClass('customErrorInput');
+			$('#length').parent().next().addClass('errorTipDisplay');
+		};
+		if (!blockLengthOfFTWAB) {
+			$('#blockLengthOfFTWAB').addClass('customErrorInput');
+			$('#blockLengthOfFTWAB').parent().next().addClass('errorTipDisplay');
+		};
+		var postData = {
+			amount: amount,
+			length: length,
+			blockLengthOfFTWAB: blockLengthOfFTWAB,
+			isSelected: isSelected,
+			start: ""
+		};
+		return postData;
 	}
 	
 	// Event listeners in jQuery
@@ -310,7 +409,8 @@
 		$("#submit-btn").click(function(e) {
 			e.preventDefault();
 			if (fileUploadSuccess) {
-				postParas();
+				var postData = handleParams();
+				postParas(postData);
 			} else {
 				// Display the prompt box of not selecting file
 				var warningContent = 
@@ -324,6 +424,10 @@
 				$("#progress-container").html(warningContent);
 			}
 		});
+		// Event listener in step3
+		$('#amount').on('input', veryfyInput);
+		$('#length').on('input', veryfyInput);
+		$('#blockLengthOfFTWAB').on('input', veryfyInput);
 	});
 </script>
 {% endblock %}
