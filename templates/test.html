@@ -277,7 +277,7 @@
 			}),
 			success: function(data) {
 				fileUploadSuccess = true;
-						},
+			},
 		});
 	}
 
@@ -319,10 +319,11 @@
 
 	// Handle params to be upload
 	function handleParams() {
-		var start = ""
-		var amount = parseInt(document.getElementById("amount").value);
-		var length = parseInt(document.getElementById("length").value);
-		var blockLengthOfFTWAB = parseInt(document.getElementById("blockLengthOfFTWAB").value);
+		var checkFlag = 0;
+		var start = "";
+		var amount = document.getElementById("amount").value;
+		var length = document.getElementById("length").value;
+		var blockLengthOfFTWAB = document.getElementById("blockLengthOfFTWAB").value;
 		var isSelected = new Object();
 		isSelected.frequencyTest = document.getElementById("frequencyTest").checked === true ? 1 : 0;
 		isSelected.frequencyTestWithinABlock = document.getElementById("frequencyTestWithinABlock").checked === true ? 1 : 0;
@@ -344,27 +345,34 @@
 					'Please select at least one test.' +
 				'</div>';
 				$("#prompt-container").html(warningContent);
+				checkFlag = 1;
 		} else {
 			var warningContent = '';
 			$("#prompt-container").html(warningContent);
 		}
 		// If no input parameters in step 3, give tips
-		if (!amount) {
+		if (!amount || !testPositiveInteger(amount)) {
 			$('#amount').addClass('customErrorInput');
 			$('#amount').parent().next().addClass('errorTipDisplay');
+			checkFlag = 1;
 		};
-		if (!length) {
+		if (!length || !testPositiveInteger(length)) {
 			$('#length').addClass('customErrorInput');
 			$('#length').parent().next().addClass('errorTipDisplay');
+			checkFlag = 1;
 		};
-		if (!blockLengthOfFTWAB) {
+		if (!blockLengthOfFTWAB || !testPositiveInteger(blockLengthOfFTWAB)) {
 			$('#blockLengthOfFTWAB').addClass('customErrorInput');
 			$('#blockLengthOfFTWAB').parent().next().addClass('errorTipDisplay');
+			checkFlag = 1;
 		};
+		if (checkFlag) {
+			return false;
+		}
 		var postData = {
-			amount: amount,
-			length: length,
-			blockLengthOfFTWAB: blockLengthOfFTWAB,
+			amount: parseInt(amount),
+			length: parseInt(length),
+			blockLengthOfFTWAB: parseInt(blockLengthOfFTWAB),
 			isSelected: isSelected,
 			start: ""
 		};
@@ -391,26 +399,16 @@
 				uploadFile();
 				// Hack the problem --- file type input cannot trigger change event for the same file.
 				$('#origin-fileinput').val('');
-			} else {
-				// Display the prompt box of not selecting file
-				var warningContent = 
-				'<div class="alert alert-warning alert-dismissible" role="alert" style="text-align: center">' + 
-					'<button type="button" class="close" data-dismiss="alert" aria-label="Close">' + 
-						'<span aria-hidden="true">' + `&times;` + '</span>' + 
-					'</button>' + 
-					'<strong>' + 'Warning!&nbsp;&nbsp;' + '</strong>' + 
-					'Please select the file you will upload first.' +
-				'</div>';
-				$("#progress-container").html(warningContent);
-				return;
-			}
+			} 
 		});
 		// Click the button to post parameters
 		$("#submit-btn").click(function(e) {
 			e.preventDefault();
 			if (fileUploadSuccess) {
 				var postData = handleParams();
-				postParas(postData);
+				if (postData) {
+					postParas(postData);
+				}
 			} else {
 				// Display the prompt box of not selecting file
 				var warningContent = 
