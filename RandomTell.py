@@ -3,7 +3,7 @@
 
 __author__ = 'Cipher Saw'
 
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, jsonify
 from werkzeug import secure_filename
 from functions.utils import *
 import os
@@ -31,15 +31,14 @@ def randomness_test():
 			file_name = secure_filename(file.filename)
 			file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
 			file.save(file_path)
-			return 'Upload the file successfully.'
+			return jsonify({'success': 0})
 		elif 'start' in request.json:
 			clear_list_in_dict(p_value_dict)
 			set_value('amount', int(request.json['amount']))
 			set_value('length', int(request.json['length']))
 			set_value('block_length_of_frequency_within_a_block', int(request.json['blockLengthOfFTWAB']))
 			set_value('is_selected', request.json['isSelected'])
-			start_random_tell(file_path)
-			return 'Upload the parameters successfully and complete the tests.'
+			return jsonify(start_random_tell(file_path))
 	return render_template('test.html')
 
 @app.route('/result')

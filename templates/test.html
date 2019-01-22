@@ -109,9 +109,14 @@
 		transition: opacity ease-in-out .15s,text-shadow ease-in-out .15s;
 	}
 
+	/* Error Prompt */
+	.errorPrompt {
+		margin-top: 20px;
+	}
+
 	/* Start */
 	#submit-btn {
-		margin-top: 20px;
+		margin-top: 0px;
 	}
 </style>
 {% endblock %}
@@ -228,6 +233,13 @@
 	</div>
 </div>
 
+<!-- Give error prompt box if uploaded file content not match parameters setting -->
+<div class="errorPrompt">
+	<div class="row">
+		<div class="col-sm-12" id="error-container"></div>
+	</div>
+</div>
+
 <div class="row">
 	<div class="col-sm-12 text-center">
 		<input class="btn btn-primary" type="button" value="Start" id="submit-btn"/>
@@ -289,7 +301,31 @@
 			data: JSON.stringify(postData),
 			contentType: 'application/json; charset=utf-8',
 			success: function(data) {
-				window.location.href = "http://" + window.location.host + "/result";
+				if (data.hasOwnProperty('success')) {
+					var errorContent = '';
+					$("#error-container").html(errorContent);
+					window.location.href = "http://" + window.location.host + "/result";
+				} else if (data.error === 101) {
+					var errorContent = 
+						'<div class="alert alert-danger alert-dismissible" role="alert" style="text-align: center">' + 
+							'<button type="button" class="close" data-dismiss="alert" aria-label="Close">' + 
+								'<span aria-hidden="true">' + `&times;` + '</span>' + 
+							'</button>' + 
+							'<strong>' + 'Error!&nbsp;&nbsp;' + '</strong>' + 
+							'The uploaded file contains an illegal character except 0, 1 or \\n.' +
+						'</div>';
+					$("#error-container").html(errorContent);
+				} else if (data.error === 102) {
+					var errorContent = 
+						'<div class="alert alert-danger alert-dismissible" role="alert" style="text-align: center">' + 
+							'<button type="button" class="close" data-dismiss="alert" aria-label="Close">' + 
+								'<span aria-hidden="true">' + `&times;` + '</span>' + 
+							'</button>' + 
+							'<strong>' + 'Error!&nbsp;&nbsp;' + '</strong>' + 
+							'The uploaded file is not long enough.' +
+						'</div>';
+					$("#error-container").html(errorContent);
+				}
 			},
 		});
 	}
@@ -390,7 +426,7 @@
 				// Display the progress bar with 0%
 				var progressContent = 
 				'<div class="progress" id="progress">' + 
-					'<div id="progress-bar" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">' +
+					'<div id="progress-bar" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">' +
 						'0%' +
 					'</div>' +
 				'</div>';
