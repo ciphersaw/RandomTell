@@ -5,7 +5,7 @@ from functions.tests import *
 
 def start_random_tell(file_path):
 	with open(file_path, 'r') as file:
-		read_in_ascii_format(file)
+		return read_in_ascii_format(file)
 
 def read_in_ascii_format(file):
 	amount = get_value('amount')
@@ -18,12 +18,21 @@ def read_in_ascii_format(file):
 			if bit == '0' or bit == '1':
 				epsilon.append(int(bit))
 				j += 1
-			else:
+			elif bit == '\n':
 				continue
+			else:
+				del epsilon[:]
+				if len(bit) == 1:
+					# Read an illegal character except '0', '1' or '\n'.
+					return {'error': 101}
+				else:
+					# Lack of data to read.
+					return {'error': 102}
 			if  j == length:
 				break
 		test_suite()
 		del epsilon[:]
+	return {'success': 0}
 
 def test_suite():
 	length = get_value('length')
