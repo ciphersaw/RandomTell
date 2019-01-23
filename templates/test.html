@@ -3,7 +3,7 @@
 {% block css %}
 <style type="text/css">
 	/* General */
-	.test-step{
+	.test-step {
 		padding: 0px;
 		margin-top: 100px;
 		background: #3d312c;
@@ -116,7 +116,7 @@
 
 	/* Start */
 	#submit-btn {
-		margin-top: 0px;
+		margin-bottom: 10px;
 	}
 </style>
 {% endblock %}
@@ -157,12 +157,12 @@
 				<div class="col-xs-2 col-sm-3 col-md-3 col-lg-4"></div>
 				<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
 					<span class="checkbox">
-						<input type="checkbox" id="frequencyTest" checked>Frequency Test				
+						<input type="checkbox" id="frequencyTest" checked><label for="frequencyTest" style="padding: 0px;">Frequency Test</label>
 					</span>
 				</div>
 				<div class="col-xs-5 col-sm-4 col-md-4 col-lg-4">
 					<span class="checkbox">
-						<input type="checkbox" id="frequencyTestWithinABlock" checked>Frequency Test within a Block						
+						<input type="checkbox" id="frequencyTestWithinABlock" checked><label for="frequencyTestWithinABlock" style="padding: 0px;">Frequency Test within a Block</label>
 					</span>
 				</div>
 				<div class="col-xs-1 col-sm-1 col-md-2 col-lg-1"></div>
@@ -171,12 +171,12 @@
 				<div class="col-xs-2 col-sm-3 col-md-3 col-lg-4"></div>
 				<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
 					<span class="checkbox">
-						<input type="checkbox" id="runsTest" checked>Runs Test						
+						<input type="checkbox" id="runsTest" checked><label for="runsTest" style="padding: 0px;">Runs Test</label>
 					</span>
 				</div>
 				<div class="col-xs-5 col-sm-4 col-md-4 col-lg-4">
 					<span class="checkbox">
-						<input type="checkbox" id="longestRunOfOnesInABlock" checked>Test for the Longest Run of Ones in a Block					
+						<input type="checkbox" id="longestRunOfOnesInABlock" checked><label for="longestRunOfOnesInABlock" style="padding: 0px;">Test for the Longest Run of Ones in a Block</label>
 					</span>
 				</div>
 				<div class="col-xs-1 col-sm-1 col-md-2 col-lg-1"></div>
@@ -202,7 +202,7 @@
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 			<span style="display: inline-block">
-				<input type="text" class="form-control" name="amount" id="amount" style="color: black" placeholder="Input amount"/>						
+				<input type="text" class="form-control" name="amount" id="amount" style="color: black" placeholder="Input amount" value="10"/>
 			</span>
 			<span class="errorTipHide">* Please input a positive integer</span>
 		</div>
@@ -214,7 +214,7 @@
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 			<span style="display: inline-block">
-				<input type="text" class="form-control" name="length" id="length" style="color: black" placeholder="Input length"/>					
+				<input type="text" class="form-control" name="length" id="length" style="color: black" placeholder="Input length" value="100000"/>
 			</span>
 			<span class="errorTipHide">* Please input a positive integer</span>
 		</div>
@@ -226,7 +226,7 @@
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 			<span style="display: inline-block; margin-bottom: 10px">
-				<input type="text" class="form-control" name="blockLengthOfFTWAB" id="blockLengthOfFTWAB" style="color: black" placeholder="Input block length"/>				
+				<input type="text" class="form-control" name="blockLengthOfFTWAB" id="blockLengthOfFTWAB" style="color: black" placeholder="Input block length" value="10000"/>
 			</span>
 			<span class="errorTipHide">* Please input a positive integer</span>
 		</div>
@@ -284,7 +284,7 @@
 				percent = e.loaded / e.total;
 				percentDisplay = parseInt((e.loaded / e.total) * 100) + '%';
 				var width = $("#progress-container").width();
-				$("#progress-bar").css("width", (percent * width));
+				$("#progress-bar").css("width", percentDisplay);
 				$("#progress-bar").html(percentDisplay);
 			}),
 			success: function(data) {
