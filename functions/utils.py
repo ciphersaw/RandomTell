@@ -33,6 +33,7 @@ def read_in_ascii_format(file):
 		test_suite()
 		del epsilon[:]
 	results_of_p_value_distribution()
+	results_of_pass_rate()
 	return {'success': 0}
 
 def test_suite():
@@ -50,7 +51,6 @@ def test_suite():
 
 def results_of_p_value_distribution():
 	amount = get_value('amount')
-	is_selected = get_value('is_selected')
 	p_value_dict = get_value('p_value_dict')
 	p_value_distribution = get_value('p_value_distribution')
 	for key in p_value_dict:
@@ -68,6 +68,27 @@ def results_of_p_value_distribution():
 		else:
 			p_value_distribution[key][10] = 0.0
 
+def results_of_pass_rate():
+	amount = get_value('amount')
+	alpha = get_value('alpha')
+	p_value_dict = get_value('p_value_dict')
+	pass_rate = get_value('pass_rate')
+	confidence_interval = get_value('confidence_interval')
+	confidence_interval['confidence_level'] = 1 - alpha
+	confidence_interval['general_interval'] = 3 * ((alpha * (1 - alpha) / amount) ** 0.5)
+	for key in p_value_dict:
+		count = 0
+		for i in range(len(p_value_dict[key])):
+			if p_value_dict[key][i] >= alpha:
+				count += 1
+			pass_rate[key] = float(count) / amount
+
+def reset_results():
+	reset_p_value_dict(get_value('p_value_dict'))
+	reset_p_value_distribution(get_value('p_value_distribution'))
+	reset_pass_rate(get_value('pass_rate'))
+	reset_confidence_interval(get_value('confidence_interval'))
+
 def reset_p_value_dict(d):
 	for key in d:
 		del d[key][:]
@@ -75,3 +96,11 @@ def reset_p_value_dict(d):
 def reset_p_value_distribution(d):
 	for key in d:
 		d[key] = [0 for i in range(11)]
+
+def reset_pass_rate(d):
+	for key in d:
+		d[key] = 0.0
+
+def reset_confidence_interval(d):
+	for key in d:
+		d[key] = 0.0
