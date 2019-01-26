@@ -10,6 +10,7 @@ import os
 
 global_variables_initialization()
 p_value_dict = get_value('p_value_dict')
+p_value_distribution = get_value('p_value_distribution')
 
 UPLOAD_FOLDER = 'uploads'
 
@@ -33,7 +34,8 @@ def randomness_test():
 			file.save(file_path)
 			return jsonify({'success': 0})
 		elif 'start' in request.json:
-			clear_list_in_dict(p_value_dict)
+			reset_p_value_dict(p_value_dict)
+			reset_p_value_distribution(p_value_distribution)
 			set_value('amount', int(request.json['amount']))
 			set_value('length', int(request.json['length']))
 			set_value('block_length_of_frequency_within_a_block', int(request.json['blockLengthOfFTWAB']))
@@ -43,7 +45,7 @@ def randomness_test():
 
 @app.route('/result')
 def result_display():
-	return render_template('result.html', p_value_dict = p_value_dict)
+	return render_template('result.html', p_value_dict = p_value_dict, p_value_distribution = p_value_distribution)
 
 if __name__ == '__main__':
 	app.run(debug=True)
