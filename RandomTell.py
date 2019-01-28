@@ -50,5 +50,19 @@ def result_display():
 	return render_template('result.html', p_value_dict = p_value_dict, p_value_distribution = p_value_distribution, \
 		pass_rate = pass_rate, confidence_interval = confidence_interval)
 
+@app.route('/result/p_values_distribution')
+def p_values_distribution_display():
+	amount = get_value('amount')
+	length = get_value('length')
+	alpha = get_value('alpha')
+	return render_template('p_values_distribution.html', p_value_distribution = p_value_distribution, amount = amount, length = length, alpha = alpha)
+
+@app.route('/result/pass_rate')
+def pass_rate_display():
+	amount = get_value('amount')
+	length = get_value('length')
+	alpha = get_value('alpha')
+	return render_template('pass_rate.html', pass_rate = pass_rate, confidence_interval = confidence_interval, amount = amount, length = length, alpha = alpha)
+
 if __name__ == '__main__':
 	app.run(debug=True)

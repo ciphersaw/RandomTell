@@ -176,7 +176,7 @@
 				</div>
 				<div class="col-xs-5 col-sm-4 col-md-4 col-lg-4">
 					<span class="checkbox">
-						<input type="checkbox" id="longestRunOfOnesInABlock" checked><label for="longestRunOfOnesInABlock" style="padding: 0px;">Test for the Longest Run of Ones in a Block</label>
+						<input type="checkbox" id="longestRunOfOnes" checked><label for="longestRunOfOnes" style="padding: 0px;">Test for the Longest Run of Ones</label>
 					</span>
 				</div>
 				<div class="col-xs-1 col-sm-1 col-md-2 col-lg-1"></div>
@@ -304,7 +304,7 @@
 				if (data.hasOwnProperty('success')) {
 					var errorContent = '';
 					$("#error-container").html(errorContent);
-					window.location.href = "http://" + window.location.host + "/result";
+					window.location.href = "http://" + window.location.host + "/result/p_values_distribution";
 				} else if (data.error === 101) {
 					var errorContent = 
 						'<div class="alert alert-danger alert-dismissible" role="alert" style="text-align: center">' + 
@@ -364,7 +364,7 @@
 		isSelected.frequencyTest = document.getElementById("frequencyTest").checked === true ? 1 : 0;
 		isSelected.frequencyTestWithinABlock = document.getElementById("frequencyTestWithinABlock").checked === true ? 1 : 0;
 		isSelected.runsTest = document.getElementById("runsTest").checked === true ? 1 : 0;
-		isSelected.longestRunOfOnesInABlock = document.getElementById("longestRunOfOnesInABlock").checked === true ? 1 : 0;
+		isSelected.longestRunOfOnes = document.getElementById("longestRunOfOnes").checked === true ? 1 : 0;
 		// If none test selected in step 2, give warning
 		var testCount = 0;
 		for (var test in isSelected) {

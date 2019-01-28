@@ -48,7 +48,7 @@ def runs(n):
 		p_value = erfc(abs(r_obs - 2 * n * pi * (1 - pi)) / (2 * sqrt(2 * n) * pi * (1 - pi)))
 	p_value_dict['runs'].append(p_value)
 
-def longest_run_of_ones_in_a_block(n):
+def longest_run_of_ones(n):
 	epsilon = get_value('epsilon')
 	p_value_dict = get_value('p_value_dict')
 	if n < 128:
@@ -91,4 +91,4 @@ def longest_run_of_ones_in_a_block(n):
 		for i in range(K + 1):
 			chi_squared += ((v[i] - length_of_a_block * pi[i]) ** 2) / (length_of_a_block * pi[i])
 		p_value = gammaincc(K / 2.0, chi_squared / 2.0)
-	p_value_dict['longest_run_of_ones_in_a_block'].append(p_value)
+	p_value_dict['longest_run_of_ones'].append(p_value)

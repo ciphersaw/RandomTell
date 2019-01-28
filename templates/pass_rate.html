@@ -1,0 +1,241 @@
+{% extends "common/base.html" %}
+
+{% block css %}
+<style type="text/css">
+	ul,li { 
+		padding:0;
+		margin:0;
+		list-style:none;
+	}
+	a {
+		text-decoration: none;
+	}
+	#content {
+		min-height: 600px;
+	}
+	.title {
+		text-align: center;
+		margin-top: 80px;
+	}
+	.title h1 {
+		font-size: 2em;
+		font-weight: bold;
+	}
+	.parameters {
+		text-align: center;
+		font-size: 1.1em;
+		margin-top: 20px;
+	}
+	#content {
+		color: #FFF;
+	}
+	#content .siderNavList {
+		position: fixed;
+		top: 200px;
+		left: 0px;
+		width: 260px;
+		margin-right: 200px;
+	}
+	#content .resultContainer {
+		margin-top: 50px;
+		margin-left: 260px;
+	}
+	.pValueContainer {
+		margin-top: 50px;
+		font-size: 1.1em;
+		font-weight: bold;
+	}
+	.panel-primary .list-group-item.current
+	{
+		color: #FFF;
+		background-color: #8B7D7B;
+	}
+	.panel a.list-group-item.current:hover, a.list-group-item.current:focus
+	{
+		color: #000;
+	}
+	#headingOne a {
+		text-decoration: none;
+	}
+	#headingTwo a {
+		text-decoration: none;
+	}
+	#headingOne a:hover {
+		color: #dab2a6;
+	}
+	#headingTwo a:hover {
+		color: #dab2a6;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content">
+	<div class="title">
+		<h1>General Results — Pass Rate</h1>
+	</div>
+	<div class="parameters">
+		<span>Amount of Sequence：{{ amount }}&nbsp;&nbsp;&nbsp;</span>
+		<span>Length of a Sequence：{{ length }}&nbsp;&nbsp;&nbsp;</span>
+		<span>Significant Level：{{ alpha }}</span>
+	</div>
+	<div class="siderNavList">
+		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+			<div class="panel panel-primary" style="background: #1a100a; border-color: #1a100a;">
+				<div class="panel-heading" role="tab" id="headingOne" style="background: #1a100a; border-color: #1a100a;">
+					<h4 class="panel-title">
+						<a role="button" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							General Results&nbsp;&nbsp;<span class="caret"></span>
+						</a>
+					</h4>
+				</div>
+				<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+					<ul class="list-group">
+						<li>
+							<a href="/result/p_values_distribution" class="list-group-item">
+								Distribution of P-Values&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:;" class="list-group-item current">
+								Pass Rate&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:;" class="list-group-item">
+								Characters Proportion&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="panel panel-primary" style="background: #1a100a; border-color: #1a100a;">
+				<div class="panel-heading" role="tab" id="headingTwo" style="background: #1a100a; border-color: #1a100a;">
+				<h4 class="panel-title">
+					<a class="collapsed" role="button" data-toggle="collapse" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+						Process Analysis&nbsp;&nbsp;<span class="caret"></span>
+					</a>
+				</h4>
+				</div>
+				<div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+					<ul class="list-group">
+						<li>
+							<a href="javascript:;" class="list-group-item">
+								Frequency Test&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:;" class="list-group-item">
+								Frequency Test within a Block&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:;" class="list-group-item">
+								Runs Test&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:;" class="list-group-item">
+								Test for the Longest Run of Ones&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>       
+	</div>
+
+	<div class="resultContainer">
+		<div class="row">
+		   <div class="col-sm-8 text-center">
+			   <div id="passRate" style="width: 600px;height:400px;"></div>
+		   </div>
+		   <div class="col-sm-4 text-left">
+			   <div class="pValueContainer">
+					<p>Confidence Level：{{ "%.3f" % confidence_interval["confidence_level"] }}</p>
+					<p>Upper Limit：{{ "%.3f" % (confidence_interval["confidence_level"] + confidence_interval["general_interval"]) }}</p>
+					<p>Lower Limit：{{ "%.3f" % (confidence_interval["confidence_level"] - confidence_interval["general_interval"]) }}</p>
+			   </div>
+		   </div>
+		</div>
+   </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/echarts.min.js') }}"></script>
+
+<script type="text/javascript">
+	var pass_rate = JSON.parse('{{ pass_rate|tojson }}');
+	var confidence_interval = JSON.parse('{{ confidence_interval|tojson }}');
+	var lowerLimit = confidence_interval['confidence_level'] - confidence_interval['general_interval'];
+	var upperLimit = confidence_interval['confidence_level'] + confidence_interval['general_interval'];
+	var passRateChart = echarts.init(document.getElementById('passRate'));
+	var passRateOption = {
+		color: ['#CD7054'],
+		tooltip: {},
+		xAxis: [
+			{
+				data : ["Test1","Test2","Test3","Test4"],
+				axisTick: {
+					alignWithLabel: true
+				},
+				axisLine: {
+					lineStyle: {
+						color:'#FFF'
+					}
+				},
+				axisLabel: {
+					textStyle: {
+						color: '#FFF'
+					}
+				}
+			}
+		],
+		yAxis: {
+			name: 'Pass Rate',
+			max: function(value) {
+				return value.max + 0.2;
+			},
+			min: 0.8,
+			axisLine: {
+				lineStyle: {
+					color: '#FFF'
+				}   
+			},
+			axisLabel: {
+				textStyle: {
+					color: '#FFF'
+				}
+			}
+		},
+		series: [{
+			name: 'Pass Rate',
+			type: 'scatter',
+			data: [
+				["Test1", pass_rate['frequency']],
+				["Test2", pass_rate['frequency_within_a_block']],
+				["Test3", pass_rate['runs']],
+				["Test4", pass_rate['longest_run_of_ones']]
+			],
+			markLine : {
+				precision: 3,
+				lineStyle: {
+					normal: {
+						type: 'solid',
+						color: '#FFF68F'
+					},
+				},
+				data: [
+					{name : 'Lower Limit', yAxis: lowerLimit},
+					{name : 'Upper Limit', yAxis: upperLimit},
+					{name : 'Confidence Level', yAxis: confidence_interval['confidence_level']},
+				]
+			}
+		}]
+	};
+	passRateChart.setOption(passRateOption);
+</script>
+{% endblock %}
