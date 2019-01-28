@@ -14,19 +14,19 @@ def global_variables_initialization():
 			'frequency': [],
 			'frequency_within_a_block': [],
 			'runs': [],
-			'longest_run_of_ones_in_a_block': []
+			'longest_run_of_ones': []
 		},
 		'p_value_distribution': {
 			'frequency': [0 for i in range(11)],
 			'frequency_within_a_block': [0 for i in range(11)],
 			'runs': [0 for i in range(11)],
-			'longest_run_of_ones_in_a_block': [0 for i in range(11)]
+			'longest_run_of_ones': [0 for i in range(11)]
 		},
 		'pass_rate': {
 			'frequency': 0.0,
 			'frequency_within_a_block': 0.0,
 			'runs': 0.0,
-			'longest_run_of_ones_in_a_block': 0.0
+			'longest_run_of_ones': 0.0
 		},
 		'confidence_interval': {
 			'confidence_level': 0.0,

@@ -46,8 +46,8 @@ def test_suite():
 		frequency_within_a_block(block_length_of_frequency_within_a_block, length)
 	if is_selected['runsTest']:
 		runs(length)
-	if is_selected['longestRunOfOnesInABlock']:
-		longest_run_of_ones_in_a_block(length)
+	if is_selected['longestRunOfOnes']:
+		longest_run_of_ones(length)
 
 def results_of_p_value_distribution():
 	amount = get_value('amount')
