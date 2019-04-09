@@ -26,6 +26,10 @@
 		font-size: 1.1em;
 		margin-top: 20px;
 	}
+	.remarks {
+		width: 50%;
+		margin: 0 auto;
+	}
 	#content {
 		color: #FFF;
 	}
@@ -66,6 +70,10 @@
 	#headingTwo a:hover {
 		color: #dab2a6;
 	}
+	.referenceList {
+		width: 35%;
+		margin: 0 auto;
+	}
 </style>
 {% endblock %}
 
@@ -75,9 +83,34 @@
 		<h1>General Results — Pass Rate</h1>
 	</div>
 	<div class="parameters">
-		<span>Amount of Sequence：{{ amount }}&nbsp;&nbsp;&nbsp;</span>
+		<span>Amount of Sequences：{{ amount }}&nbsp;&nbsp;&nbsp;</span>
 		<span>Length of a Sequence：{{ length }}&nbsp;&nbsp;&nbsp;</span>
 		<span>Significant Level：{{ alpha }}</span>
+	</div>
+	<div class="remarks" style="margin-top: 30px; margin-bottom: -40px;">
+		<div class="panel panel-warning" style="background: #8B795E;">
+			<div class="panel-heading" style="text-align: center; font-weight: bold;">Remarks</div>
+			<table class="table table-bordered">
+				<tbody>
+					<tr>
+						<th scope="row">1</th>
+						<td>The confidence level depends on the significant level, specifically one minus the significant level.</td>
+					</tr>
+					<tr>
+						<th scope="row">2</th>
+						<td>The confidence interval between upper limit and lower limit is calculated by the confidence level.</td>
+					</tr>
+					<tr>
+						<th scope="row">3</th>
+						<td>If the pass rate of a test lies within the interval, the test sequences can be considered to be random.</td>
+					</tr>
+					<tr>
+						<th scope="row">4</th>
+						<td>Amount of sequences should be as large as possible so that the confidence interval would be reasonably accurate.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 	<div class="siderNavList">
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -92,13 +125,13 @@
 				<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 					<ul class="list-group">
 						<li>
-							<a href="/result/p_values_distribution" class="list-group-item">
-								Distribution of P-Values&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							<a href="javascript:;" class="list-group-item current">
+								Pass Rate&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
 							</a>
 						</li>
 						<li>
-							<a href="javascript:;" class="list-group-item current">
-								Pass Rate&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							<a href="/result/p_values_distribution" class="list-group-item">
+								Distribution of <i>P-values</i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
 							</a>
 						</li>
 						<li>
@@ -144,7 +177,6 @@
 			</div>
 		</div>       
 	</div>
-
 	<div class="resultContainer">
 		<div class="row">
 		   <div class="col-sm-8 text-center">
@@ -152,13 +184,44 @@
 		   </div>
 		   <div class="col-sm-4 text-left">
 			   <div class="pValueContainer">
-					<p>Confidence Level：{{ "%.3f" % confidence_interval["confidence_level"] }}</p>
-					<p>Upper Limit：{{ "%.3f" % (confidence_interval["confidence_level"] + confidence_interval["general_interval"]) }}</p>
-					<p>Lower Limit：{{ "%.3f" % (confidence_interval["confidence_level"] - confidence_interval["general_interval"]) }}</p>
+					<p>Confidence Level ：{{ "%.3f" % confidence_interval["confidence_level"] }}</p>
+					<p>Upper Limit ：{{ "%.3f" % (confidence_interval["confidence_level"] + confidence_interval["general_interval"]) }}</p>
+					<p>Lower Limit ：{{ "%.3f" % (confidence_interval["confidence_level"] - confidence_interval["general_interval"]) }}</p>
 			   </div>
 		   </div>
 		</div>
    </div>
+   <div class="referenceList">
+	   <div class="panel panel-warning" style="background: #8B795E;">
+			<div class="panel-heading" style="text-align: center; font-weight: bold;">Reference List</div>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th scope="col">No.</th>
+						<th scope="col">Test Name</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row">1</th>
+						<td>Frequency Test</td>
+					</tr>
+					<tr>
+						<th scope="row">2</th>
+						<td>Frequency Test within a Block</td>
+					</tr>
+					<tr>
+						<th scope="row">3</th>
+						<td>Runs Test</td>
+					</tr>
+					<tr>
+						<th scope="row">4</th>
+						<td>Test for the Longest Run of Ones</td>
+					</tr>
+				</tbody>
+			</table>
+	   </div>
+	</div>
 </div>
 {% endblock %}
 
@@ -178,7 +241,7 @@
 		tooltip: {},
 		xAxis: [
 			{
-				data : ["Test1","Test2","Test3","Test4"],
+				data : ["1","2","3","4"],
 				axisTick: {
 					alignWithLabel: true
 				},

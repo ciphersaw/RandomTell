@@ -26,6 +26,10 @@
 		font-size: 1.1em;
 		margin-top: 20px;
 	}
+	.remarks {
+		width: 50%;
+		margin: 0 auto;
+	}
 	#content {
 		color: #FFF;
 	}
@@ -72,12 +76,41 @@
 {% block content %}
 <div id="content">
 	<div class="title">
-		<h1>General Results — Distribution of P-values</h1>
+		<h1>General Results — Distribution of <i>P-values</i></h1>
 	</div>
 	<div class="parameters">
-		<span>Amount of Sequence：{{ amount }}&nbsp;&nbsp;&nbsp;</span>
+		<span>Amount of Sequences：{{ amount }}&nbsp;&nbsp;&nbsp;</span>
 		<span>Length of a Sequence：{{ length }}&nbsp;&nbsp;&nbsp;</span>
 		<span>Significant Level：{{ alpha }}</span>
+	</div>
+	<div class="remarks" style="margin-top: 30px; margin-bottom: -20px;">
+		<div class="panel panel-warning" style="background: #8B795E;">
+			<div class="panel-heading" style="text-align: center; font-weight: bold;">Remarks</div>
+			<table class="table table-bordered">
+				<tbody>
+					<tr>
+						<th scope="row">1</th>
+						<td>The interval between 0 and 1 is divided into 10 sub-intervals uniformly as C1 to C10.</td>
+					</tr>
+					<tr>
+						<th scope="row">2</th>
+						<td>The <i>P-values</i> of each test lie within the corresponding sub-interval.</td>
+					</tr>
+					<tr>
+						<th scope="row">3</th>
+						<td>The <i>P-value<sub>T</sub></i> denotes the goodness-of-fit of the distribution of <i>P-values</i> and uniform distribution.</td>
+					</tr>
+					<tr>
+						<th scope="row">4</th>
+						<td>If <i>P-value<sub>T</sub></i> ≥ 0.0001, the test sequences can be considered to be uniformly distributed.</td>
+					</tr>
+					<tr>
+						<th scope="row">5</th>
+						<td>At least 55 sequences should be processed in order to generate statistically meaningful results.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 	<div class="siderNavList">
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -92,13 +125,13 @@
 				<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
 					<ul class="list-group">
 						<li>
-							<a href="javascript:;" class="list-group-item current">
-								Distribution of P-Values&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							<a href="/result/pass_rate" class="list-group-item">
+								Pass Rate&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
 							</a>
 						</li>
 						<li>
-							<a href="/result/pass_rate" class="list-group-item">
-								Pass Rate&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+							<a href="javascript:;" class="list-group-item current">
+								Distribution of <i>P-values</i>&nbsp;<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
 							</a>
 						</li>
 						<li>
@@ -152,11 +185,11 @@
 		   </div>
 		   <div class="col-sm-4 text-left">
 			   <div class="pValueContainer">
-					<p>P-Value：{{ "%.5f" % p_value_distribution["frequency"][10] }}</p>
+					<p><i>P-value<sub>T</sub></i> ：{{ "%.5f" % p_value_distribution["frequency"][10] }}</p>
 					{% if p_value_distribution["frequency"][10]>=0.0001 %}
-						<p>Indication：Success</p>
+						<p>Indication ：Success</p>
 					{% else %}
-						<p>Indication：Failure</p>
+						<p>Indication ：Failure</p>
 					{% endif %}
 			   </div>
 		   </div>
@@ -167,11 +200,11 @@
 		   </div>
 		   <div class="col-sm-4 text-left">
 			   <div class="pValueContainer">
-					<p>P-Value：{{ "%.5f" % p_value_distribution["frequency_within_a_block"][10] }}</p>
+					<p><i>P-value<sub>T</sub></i> ：{{ "%.5f" % p_value_distribution["frequency_within_a_block"][10] }}</p>
 					{% if p_value_distribution["frequency_within_a_block"][10]>=0.0001 %}
-						<p>Indication：Success</p>
+						<p>Indication ：Success</p>
 					{% else %}
-						<p>Indication：Failure</p>
+						<p>Indication ：Failure</p>
 					{% endif %}
 			   </div>
 		   </div>
@@ -182,11 +215,11 @@
 		   </div>
 		   <div class="col-sm-4 text-left">
 			   <div class="pValueContainer">
-					<p>P-Value：{{ "%.5f" % p_value_distribution["runs"][10] }}</p>
+					<p><i>P-value<sub>T</sub></i> ：{{ "%.5f" % p_value_distribution["runs"][10] }}</p>
 					{% if p_value_distribution["runs"][10]>=0.0001 %}
-						<p>Indication：Success</p>
+						<p>Indication ：Success</p>
 					{% else %}
-						<p>Indication：Failure</p>
+						<p>Indication ：Failure</p>
 					{% endif %}
 			   </div>
 		   </div>
@@ -197,11 +230,11 @@
 		   </div>
 		   <div class="col-sm-4 text-left">
 			   <div class="pValueContainer">
-					<p>P-Value：{{ "%.5f" % p_value_distribution["longest_run_of_ones"][10] }}</p>
+					<p><i>P-value<sub>T</sub></i> ：{{ "%.5f" % p_value_distribution["longest_run_of_ones"][10] }}</p>
 					{% if p_value_distribution["longest_run_of_ones"][10]>=0.0001 %}
-						<p>Indication：Success</p>
+						<p>Indication ：Success</p>
 					{% else %}
-						<p>Indication：Failure</p>
+						<p>Indication ：Failure</p>
 					{% endif %}
 			   </div>
 		   </div>
