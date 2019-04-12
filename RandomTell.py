@@ -65,4 +65,4 @@ def pass_rate_display():
 	return render_template('pass_rate.html', pass_rate = pass_rate, confidence_interval = confidence_interval, amount = amount, length = length, alpha = alpha)
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run(debug=True, host='127.0.0.1', port=5000)
