@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 __author__ = 'Cipher Saw'
+__version__ = '1.0.0'
 
 from flask import Flask, request, redirect, url_for, render_template, jsonify
 from werkzeug import secure_filename
