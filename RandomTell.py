@@ -7,7 +7,7 @@ __version__ = '1.0.0'
 from flask import Flask, request, redirect, url_for, render_template, jsonify
 from werkzeug import secure_filename
 from functions.utils import *
-import os
+import os, thread
 
 global_variables_initialization()
 p_value_dict = get_value('p_value_dict')
@@ -35,17 +35,24 @@ def randomness_test():
 			file_name = secure_filename(file.filename)
 			file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_name)
 			file.save(file_path)
-			return jsonify({'success': 0})
+			return jsonify({'status': 200})
 		elif 'start' in request.json:
 			reset_results()
 			set_value('amount', int(request.json['amount']))
 			set_value('length', int(request.json['length']))
 			set_value('alpha', 0.01)
+			set_value('finished_tests_num', 0)
+			set_value('total_tests_num', int(request.json['amount']) * int(request.json['testCount']))
 			set_value('block_length_of_frequency_within_a_block', int(request.json['blockLengthOfFTWAB']))
 			set_value('is_selected', request.json['isSelected'])
-			return jsonify(start_random_tell(file_path))
+			thread.start_new_thread(start_random_tell, (file_path,))
+			return jsonify({'status': 200, 'percent': 0})
+	elif request.method == 'GET':
+		if 'check' in request.args:
+			percent = get_value('finished_tests_num') * 100 / get_value('total_tests_num')
+			return jsonify({'status': 200, 'percent': percent})
 	return render_template('test.html')
-
+		
 @app.route('/result')
 def result_display():
 	return render_template('result.html', p_value_dict = p_value_dict, p_value_distribution = p_value_distribution, \
