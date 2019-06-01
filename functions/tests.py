@@ -14,6 +14,7 @@ def frequency(n):
 	s_obs = abs(summary) / sqrt(n)
 	p_value = erfc(s_obs / sqrt(2))
 	p_value_dict['frequency'].append(p_value)
+	set_value('finished_tests_num', get_value('finished_tests_num') + 1)
 
 def frequency_within_a_block(M, n):
 	epsilon = get_value('epsilon')
@@ -30,6 +31,7 @@ def frequency_within_a_block(M, n):
 	chi_squared = 4 * M * summary
 	p_value = gammaincc(length_of_a_block / 2.0, chi_squared / 2.0)
 	p_value_dict['frequency_within_a_block'].append(p_value)
+	set_value('finished_tests_num', get_value('finished_tests_num') + 1)
 
 def runs(n):
 	epsilon = get_value('epsilon')
@@ -47,6 +49,7 @@ def runs(n):
 				r_obs += 1
 		p_value = erfc(abs(r_obs - 2 * n * pi * (1 - pi)) / (2 * sqrt(2 * n) * pi * (1 - pi)))
 	p_value_dict['runs'].append(p_value)
+	set_value('finished_tests_num', get_value('finished_tests_num') + 1)
 
 def longest_run_of_ones(n):
 	epsilon = get_value('epsilon')
@@ -92,3 +95,4 @@ def longest_run_of_ones(n):
 			chi_squared += ((v[i] - length_of_a_block * pi[i]) ** 2) / (length_of_a_block * pi[i])
 		p_value = gammaincc(K / 2.0, chi_squared / 2.0)
 	p_value_dict['longest_run_of_ones'].append(p_value)
+	set_value('finished_tests_num', get_value('finished_tests_num') + 1)

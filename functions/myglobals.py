@@ -7,6 +7,8 @@ def global_variables_initialization():
 		'amount': 0, 
 		'length': 0,
 		'alpha': 0.0,
+		'finished_tests_num': 0,
+		'total_tests_num': 0,
 		'block_length_of_frequency_within_a_block': 0,
 		'is_selected': {},
 		'epsilon': [],
