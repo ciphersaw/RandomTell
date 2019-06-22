@@ -73,6 +73,7 @@
 	.referenceList {
 		width: 35%;
 		margin: 0 auto;
+		margin-top: 20px;
 	}
 </style>
 {% endblock %}
@@ -175,24 +176,24 @@
 					</ul>
 				</div>
 			</div>
-		</div>       
+		</div>
 	</div>
 	<div class="resultContainer">
 		<div class="row">
-		   <div class="col-sm-8 text-center">
-			   <div id="passRate" style="width: 600px;height:400px;"></div>
-		   </div>
-		   <div class="col-sm-4 text-left">
-			   <div class="pValueContainer">
+			<div class="col-sm-8 text-center">
+				<div id="passRate" style="width: 600px; height: 400px;"></div>
+			</div>
+			<div class="col-sm-4 text-left">
+				<div class="pValueContainer">
 					<p>Confidence Level ：{{ "%.3f" % confidence_interval["confidence_level"] }}</p>
 					<p>Upper Limit ：{{ "%.3f" % (confidence_interval["confidence_level"] + confidence_interval["general_interval"]) }}</p>
 					<p>Lower Limit ：{{ "%.3f" % (confidence_interval["confidence_level"] - confidence_interval["general_interval"]) }}</p>
-			   </div>
-		   </div>
+				</div>
+			</div>
 		</div>
-   </div>
-   <div class="referenceList">
-	   <div class="panel panel-warning" style="background: #8B795E;">
+	</div>
+	<div class="referenceList">
+		<div class="panel panel-warning" style="background: #8B795E;">
 			<div class="panel-heading" style="text-align: center; font-weight: bold;">Reference List</div>
 			<table class="table table-bordered">
 				<thead>
@@ -220,7 +221,7 @@
 					</tr>
 				</tbody>
 			</table>
-	   </div>
+		</div>
 	</div>
 </div>
 {% endblock %}
@@ -236,37 +237,41 @@
 	var lowerLimit = confidence_interval['confidence_level'] - confidence_interval['general_interval'];
 	var upperLimit = confidence_interval['confidence_level'] + confidence_interval['general_interval'];
 	var passRateChart = echarts.init(document.getElementById('passRate'));
+	
+	// Show the result display of such tests which are selected
+	var selectedTests = [];
+	var isSelected = JSON.parse('{{ is_selected|tojson }}');
+	if (isSelected['frequencyTest'])
+		selectedTests.push("1");
+	if (isSelected['frequencyTestWithinABlock'])
+		selectedTests.push("2");
+	if (isSelected['runsTest'])
+		selectedTests.push("3");
+	if (isSelected['longestRunOfOnes'])
+		selectedTests.push("4");
+	console.log(selectedTests);
+
+	// Set up the coordinate parameters
 	var passRateOption = {
 		color: ['#CD7054'],
-		tooltip: {},
-		xAxis: [
-			{
-				data : ["1","2","3","4"],
-				axisTick: {
-					alignWithLabel: true
-				},
-				axisLine: {
-					lineStyle: {
-						color:'#FFF'
-					}
-				},
-				axisLabel: {
-					textStyle: {
-						color: '#FFF'
-					}
-				}
-			}
-		],
-		yAxis: {
-			name: 'Pass Rate',
-			max: function(value) {
-				return value.max + 0.2;
+		tooltip: {
+			trigger: 'item'
+		},
+		xAxis: {
+			name: 'Test Labels',
+			nameLocation: 'center',
+			nameGap: 30,
+			nameTextStyle: {
+				fontSize: 14
 			},
-			min: 0.8,
+			data : selectedTests,
+			axisTick: {
+				alignWithLabel: true
+			},
 			axisLine: {
 				lineStyle: {
-					color: '#FFF'
-				}   
+					color:'#FFF'
+				}
 			},
 			axisLabel: {
 				textStyle: {
@@ -274,7 +279,31 @@
 				}
 			}
 		},
-		series: [{
+		yAxis: {
+			name: 'Pass Rate',
+			nameLocation: 'center',
+			nameGap: 40,
+			nameTextStyle: {
+				fontSize: 14
+			},
+			max: function(value) {
+				return value.max + 0.2;
+			},
+			min: function(value) {
+				return value.max - 0.2;
+			},
+			axisLine: {
+				lineStyle: {
+					color: '#FFF'
+				}
+			},
+			axisLabel: {
+				textStyle: {
+					color: '#FFF'
+				}
+			}
+		},
+		series: {
 			name: 'Pass Rate',
 			type: 'scatter',
 			data: [
@@ -297,7 +326,7 @@
 					{name : 'Confidence Level', yAxis: confidence_interval['confidence_level']},
 				]
 			}
-		}]
+		}
 	};
 	passRateChart.setOption(passRateOption);
 </script>

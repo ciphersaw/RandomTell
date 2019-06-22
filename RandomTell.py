@@ -63,14 +63,18 @@ def p_values_distribution_display():
 	amount = get_value('amount')
 	length = get_value('length')
 	alpha = get_value('alpha')
-	return render_template('p_values_distribution.html', p_value_distribution = p_value_distribution, amount = amount, length = length, alpha = alpha)
+	is_selected = get_value('is_selected')
+	return render_template('p_values_distribution.html', p_value_distribution = p_value_distribution, \
+		amount = amount, length = length, alpha = alpha, is_selected = is_selected)
 
 @app.route('/result/pass_rate')
 def pass_rate_display():
 	amount = get_value('amount')
 	length = get_value('length')
 	alpha = get_value('alpha')
-	return render_template('pass_rate.html', pass_rate = pass_rate, confidence_interval = confidence_interval, amount = amount, length = length, alpha = alpha)
+	is_selected = get_value('is_selected')
+	return render_template('pass_rate.html', pass_rate = pass_rate, confidence_interval = confidence_interval, \
+		amount = amount, length = length, alpha = alpha, is_selected = is_selected)
 
 if __name__ == '__main__':
-	app.run(debug=True, host='127.0.0.1', port=5000)
+	app.run(debug = True, host = '127.0.0.1', port = 5000)

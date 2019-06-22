@@ -70,6 +70,9 @@
 	#headingTwo a:hover {
 		color: #dab2a6;
 	}
+	.row {
+		margin-top: 20px;
+	}
 </style>
 {% endblock %}
 
@@ -175,71 +178,71 @@
 					</ul>
 				</div>
 			</div>
-		</div>       
+		</div>
 	</div>
 
 	<div class="resultContainer">
-		<div class="row">
-		   <div class="col-sm-8 text-center">
-			   <div id="frequencyTest" style="width: 600px;height:400px;"></div>
-		   </div>
-		   <div class="col-sm-4 text-left">
-			   <div class="pValueContainer">
+		<div class="row" id="container-1">
+			<div class="col-sm-8 text-center">
+				<div id="frequencyTest" style="width: 600px;height:400px;"></div>
+			</div>
+			<div class="col-sm-4 text-left">
+				<div class="pValueContainer">
 					<p><i>P-value<sub>T</sub></i> ：{{ "%.5f" % p_value_distribution["frequency"][10] }}</p>
 					{% if p_value_distribution["frequency"][10]>=0.0001 %}
 						<p>Indication ：Success</p>
 					{% else %}
 						<p>Indication ：Failure</p>
 					{% endif %}
-			   </div>
-		   </div>
+				</div>
+			</div>
 		</div>
-		<div class="row">
-		   <div class="col-sm-8 text-center">
-			   <div id="frequency" style="width: 600px;height:400px;"></div>
-		   </div>
-		   <div class="col-sm-4 text-left">
-			   <div class="pValueContainer">
+		<div class="row" id="container-2">
+			<div class="col-sm-8 text-center">
+				<div id="frequency" style="width: 600px;height:400px;"></div>
+			</div>
+			<div class="col-sm-4 text-left">
+				<div class="pValueContainer">
 					<p><i>P-value<sub>T</sub></i> ：{{ "%.5f" % p_value_distribution["frequency_within_a_block"][10] }}</p>
 					{% if p_value_distribution["frequency_within_a_block"][10]>=0.0001 %}
 						<p>Indication ：Success</p>
 					{% else %}
 						<p>Indication ：Failure</p>
 					{% endif %}
-			   </div>
-		   </div>
+				</div>
+			</div>
 		</div>
-		<div class="row">
-		   <div class="col-sm-8 text-center">
-			   <div id="runs" style="width: 600px;height:400px;"></div>
-		   </div>
-		   <div class="col-sm-4 text-left">
-			   <div class="pValueContainer">
+		<div class="row" id="container-3">
+			<div class="col-sm-8 text-center">
+				<div id="runs" style="width: 600px;height:400px;"></div>
+			</div>
+			<div class="col-sm-4 text-left">
+				<div class="pValueContainer">
 					<p><i>P-value<sub>T</sub></i> ：{{ "%.5f" % p_value_distribution["runs"][10] }}</p>
 					{% if p_value_distribution["runs"][10]>=0.0001 %}
 						<p>Indication ：Success</p>
 					{% else %}
 						<p>Indication ：Failure</p>
 					{% endif %}
-			   </div>
-		   </div>
-		</div> 
-		<div class="row">
-		   <div class="col-sm-8 text-center">
-			   <div id="longestRun" style="width: 600px;height:400px;"></div>
-		   </div>
-		   <div class="col-sm-4 text-left">
-			   <div class="pValueContainer">
+				</div>
+			</div>
+		</div>
+		<div class="row" id="container-4">
+			<div class="col-sm-8 text-center">
+				<div id="longestRun" style="width: 600px;height:400px;"></div>
+			</div>
+			<div class="col-sm-4 text-left">
+				<div class="pValueContainer">
 					<p><i>P-value<sub>T</sub></i> ：{{ "%.5f" % p_value_distribution["longest_run_of_ones"][10] }}</p>
 					{% if p_value_distribution["longest_run_of_ones"][10]>=0.0001 %}
 						<p>Indication ：Success</p>
 					{% else %}
 						<p>Indication ：Failure</p>
 					{% endif %}
-			   </div>
-		   </div>
+				</div>
+			</div>
 		</div>
-   </div>
+	</div>
 </div>
 {% endblock %}
 
@@ -254,6 +257,8 @@
 	var blockFrequencyTestChart = echarts.init(document.getElementById('frequency'));
 	var runsChart = echarts.init(document.getElementById('runs'));
 	var longestRunChart = echarts.init(document.getElementById('longestRun'));
+
+	// Set up the coordinate parameters for each test
 	var frequencyTestOption = {
 		color: ['#CD7054'],
 		title: {
@@ -264,34 +269,25 @@
 		},
 		tooltip: {
 			trigger: 'axis',
-			axisPointer : {
-				type : 'shadow'
+			axisPointer: {
+				type: 'shadow'
 			}
 		},
-		xAxis: [
-			{
-				data : ["C1","C2","C3","C4","C5","C6", "C7", "C8", "C9", "C10"],
-				axisTick: {
-					alignWithLabel: true
-				},
-				axisLine: {
-					lineStyle:{
-						color:'#FFF'
-					}
-				},
-				axisLabel: {
-					textStyle: {
-						color: '#FFF'
-					}
-				}
-			}
-		],
-		yAxis: {
-			name: 'Frequency Counts',
+		xAxis: {
+			name: 'Intervals',
+			nameLocation: 'center',
+			nameGap: 30,
+			nameTextStyle: {
+				fontSize: 14
+			},
+			data : ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"],
+			axisTick: {
+				alignWithLabel: true
+			},
 			axisLine: {
 				lineStyle:{
 					color:'#FFF'
-				}   
+				}
 			},
 			axisLabel: {
 				textStyle: {
@@ -299,11 +295,29 @@
 				}
 			}
 		},
-		series: [{
+		yAxis: {
+			name: 'Frequency Counts',
+			nameLocation: 'center',
+			nameGap: 40,
+			nameTextStyle: {
+				fontSize: 14
+			},
+			axisLine: {
+				lineStyle:{
+					color:'#FFF'
+				}
+			},
+			axisLabel: {
+				textStyle: {
+					color: '#FFF'
+				}
+			}
+		},
+		series: {
 			name: 'Number',
 			type: 'bar',
 			data: p_value_dict['frequency'].slice(0,10)
-		}],
+		}
 	};
 	var blockFrequencyTestOption = {
 		color: ['#CD7054'],
@@ -315,34 +329,25 @@
 		},
 		tooltip: {
 			trigger: 'axis',
-			axisPointer : {
-				type : 'shadow'
+			axisPointer: {
+				type: 'shadow'
 			}
 		},
-		xAxis: [
-			{
-				data : ["C1","C2","C3","C4","C5","C6", "C7", "C8", "C9", "C10"],
-				axisTick: {
-					alignWithLabel: true
-				},
-				axisLine: {
-					lineStyle: {
-						color:'#FFF'
-					}
-				},
-				axisLabel: {
-					textStyle: {
-						color: '#FFF'
-					}
-				}
-			}
-		],
-		yAxis: {
-			name: 'Frequency Counts',
+		xAxis: {
+			name: 'Intervals',
+			nameLocation: 'center',
+			nameGap: 30,
+			nameTextStyle: {
+				fontSize: 14
+			},
+			data : ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"],
+			axisTick: {
+				alignWithLabel: true
+			},
 			axisLine: {
 				lineStyle: {
 					color:'#FFF'
-				}   
+				}
 			},
 			axisLabel: {
 				textStyle: {
@@ -350,11 +355,29 @@
 				}
 			}
 		},
-		series: [{
+		yAxis: {
+			name: 'Frequency Counts',
+			nameLocation: 'center',
+			nameGap: 40,
+			nameTextStyle: {
+				fontSize: 14
+			},
+			axisLine: {
+				lineStyle: {
+					color:'#FFF'
+				}
+			},
+			axisLabel: {
+				textStyle: {
+					color: '#FFF'
+				}
+			}
+		},
+		series: {
 			name: 'Number',
 			type: 'bar',
 			data: p_value_dict['frequency_within_a_block'].slice(0,10)
-		}]
+		}
 	};
 	var runsOption = {
 		color: ['#CD7054'],
@@ -366,34 +389,25 @@
 		},
 		tooltip: {
 			trigger: 'axis',
-			axisPointer : {
-				type : 'shadow'
+			axisPointer: {
+				type: 'shadow'
 			}
 		},
-		xAxis: [
-			{
-				data : ["C1","C2","C3","C4","C5","C6", "C7", "C8", "C9", "C10"],
-				axisTick: {
-					alignWithLabel: true
-				},
-				axisLine: {
-					lineStyle: {
-						color:'#FFF'
-					}
-				},
-				axisLabel: {
-					textStyle: {
-						color: '#FFF'
-					}
-				}
-			}
-		],
-		yAxis: {
-			name: 'Frequency Counts',
+		xAxis: {
+			name: 'Intervals',
+			nameLocation: 'center',
+			nameGap: 30,
+			nameTextStyle: {
+				fontSize: 14
+			},
+			data : ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"],
+			axisTick: {
+				alignWithLabel: true
+			},
 			axisLine: {
 				lineStyle: {
 					color:'#FFF'
-                    }   
+				}
 			},
 			axisLabel: {
 				textStyle: {
@@ -401,11 +415,29 @@
 				}
 			}
 		},
-		series: [{
+		yAxis: {
+			name: 'Frequency Counts',
+			nameLocation: 'center',
+			nameGap: 40,
+			nameTextStyle: {
+				fontSize: 14
+			},
+			axisLine: {
+				lineStyle: {
+					color:'#FFF'
+					}
+			},
+			axisLabel: {
+				textStyle: {
+					color: '#FFF'
+				}
+			}
+		},
+		series: {
 			name: 'Number',
 			type: 'bar',
 			data: p_value_dict['runs'].slice(0,10)
-		}]
+		}
 	};
 	var longestRunOption = {
 		color: ['#CD7054'],
@@ -417,34 +449,25 @@
 		},
 		tooltip: {
 			trigger: 'axis',
-			axisPointer : {
-				type : 'shadow'
+			axisPointer: {
+				type: 'shadow'
 			}
 		},
-		xAxis: [
-			{
-				data : ["C1","C2","C3","C4","C5","C6", "C7", "C8", "C9", "C10"],
-				axisTick: {
-					alignWithLabel: true
-				},
-				axisLine: {
-					lineStyle: {
-						color:'#FFF'
-					}
-				},
-				axisLabel: {
-					textStyle: {
-						color: '#FFF'
-					}
-				}
-			}
-		],
-		yAxis: {
-			name: 'Frequency Counts',
+		xAxis: {
+			name: 'Intervals',
+			nameLocation: 'center',
+			nameGap: 30,
+			nameTextStyle: {
+				fontSize: 14
+			},
+			data : ["C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10"],
+			axisTick: {
+				alignWithLabel: true
+			},
 			axisLine: {
 				lineStyle: {
 					color:'#FFF'
-				}   
+				}
 			},
 			axisLabel: {
 				textStyle: {
@@ -452,15 +475,45 @@
 				}
 			}
 		},
-		series: [{
+		yAxis: {
+			name: 'Frequency Counts',
+			nameLocation: 'center',
+			nameGap: 40,
+			nameTextStyle: {
+				fontSize: 14
+			},
+			axisLine: {
+				lineStyle: {
+					color:'#FFF'
+				}
+			},
+			axisLabel: {
+				textStyle: {
+					color: '#FFF'
+				}
+			}
+		},
+		series: {
 			name: 'Number',
 			type: 'bar',
 			data: p_value_dict['longest_run_of_ones'].slice(0,10)
-		}]
+		}
 	};
 	frequencyTestChart.setOption(frequencyTestOption);
 	blockFrequencyTestChart.setOption(blockFrequencyTestOption);
 	runsChart.setOption(runsOption);
 	longestRunChart.setOption(longestRunOption);
+
+	// Hide the result display of such tests which are not selected
+	var isSelected = JSON.parse('{{ is_selected|tojson }}');
+	if (!isSelected['frequencyTest']) 
+		document.getElementById("container-1").style.display = "none";
+	if (!isSelected['frequencyTestWithinABlock']) 
+		document.getElementById("container-2").style.display = "none";
+	if (!isSelected['runsTest']) 
+		document.getElementById("container-3").style.display = "none";
+	if (!isSelected['longestRunOfOnes']) 
+		document.getElementById("container-4").style.display = "none";
+
 </script>
 {% endblock %}
