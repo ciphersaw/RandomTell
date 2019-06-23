@@ -326,12 +326,12 @@
 		$.getJSON("/test", {"check": 1}, function(data) {
 			// Uploaded file succeed and testing unfinished
 			if (data.status === 200 && data.percent < 100) {
+				updateProgressBar(progressContainerId, progressBarId, data.percent);
 				setTimeout(
 					function() {
 						checkProgress(progressContainerId, progressBarId);
 					}, 1000
 				);
-				updateProgressBar(progressContainerId, progressBarId, data.percent);
 			} else if (data.status === 200 && data.percent >= 100) {
 				updateProgressBar(progressContainerId, progressBarId, data.percent);
 				setTimeout(
@@ -354,6 +354,8 @@
 
 	// Update progress bar of testing
 	function updateProgressBar(progressContainerId, progressBarId, percent) {
+		$("#errorPrompt").hide(); 
+		$("#checkProgressPrompt").show();
 		percentDisplay = parseInt(percent) + '%'
 		$(progressBarId).css("width", percentDisplay);
 		$(progressBarId).html(percentDisplay);

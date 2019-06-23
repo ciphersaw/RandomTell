@@ -7,6 +7,7 @@ def global_variables_initialization():
 		'amount': 0, 
 		'length': 0,
 		'alpha': 0.0,
+		'error_code': 0,
 		'finished_tests_num': 0,
 		'total_tests_num': 0,
 		'block_length_of_frequency_within_a_block': 0,
@@ -32,8 +33,7 @@ def global_variables_initialization():
 		},
 		'confidence_interval': {
 			'confidence_level': 0.0,
-			'general_interval': 0.0,
-			'special_interval': 0.0
+			'general_interval': 0.0
 		}
 	}
 

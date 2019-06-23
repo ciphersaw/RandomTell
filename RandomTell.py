@@ -41,6 +41,7 @@ def randomness_test():
 			set_value('amount', int(request.json['amount']))
 			set_value('length', int(request.json['length']))
 			set_value('alpha', 0.01)
+			set_value('error_code', 0)
 			set_value('finished_tests_num', 0)
 			set_value('total_tests_num', int(request.json['amount']) * int(request.json['testCount']))
 			set_value('block_length_of_frequency_within_a_block', int(request.json['blockLengthOfFTWAB']))
@@ -49,8 +50,12 @@ def randomness_test():
 			return jsonify({'status': 200, 'percent': 0})
 	elif request.method == 'GET':
 		if 'check' in request.args:
-			percent = get_value('finished_tests_num') * 100 / get_value('total_tests_num')
-			return jsonify({'status': 200, 'percent': percent})
+			error_code = get_value('error_code')
+			if error_code == 0:
+				percent = get_value('finished_tests_num') * 100 / get_value('total_tests_num')
+				return jsonify({'status': 200, 'percent': percent})
+			else:
+				return jsonify({'status': error_code})
 	return render_template('test.html')
 		
 @app.route('/result')
