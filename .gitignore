@@ -3,4 +3,5 @@
 
 # Uploaded files
 /uploads/*
-!/uploads/example
+!/uploads/ascii
+!/uploads/binary

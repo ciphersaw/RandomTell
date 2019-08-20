@@ -40,6 +40,7 @@ def randomness_test():
 			reset_results()
 			set_value('amount', int(request.json['amount']))
 			set_value('length', int(request.json['length']))
+			set_value('file_type', int(request.json['fileType']))
 			set_value('alpha', 0.01)
 			set_value('error_code', 0)
 			set_value('finished_tests_num', 0)

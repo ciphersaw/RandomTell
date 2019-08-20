@@ -7,6 +7,7 @@ def global_variables_initialization():
 		'amount': 0, 
 		'length': 0,
 		'alpha': 0.0,
+		'file_type': 0,
 		'error_code': 0,
 		'finished_tests_num': 0,
 		'total_tests_num': 0,

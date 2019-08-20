@@ -202,9 +202,25 @@
 			<p class="step-title">Step 3&nbsp;&nbsp;&nbsp;Parameters Setting</p>
 		</div>
 	</div>
-	<div class="row" style="margin-left: 0px; margin-right: 0px">
+	<div class="row">
 		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-2"></div>
 		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 text-right">
+			<span>File Type :</span>
+		</div>
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			<span style="display: inline-block; margin-left: 0px; margin-right: 40px">
+				<input type="radio" name="type" id="ascii"	value="0" checked/> 
+				<label for="ascii">ASCII</label>
+			</span>
+			<span style="display: inline-block; margin-left: 0px; margin-right: 40px">
+				<input type="radio" name="type" id="binary" value="1"/> 
+				<label for="binary">Binary</label>
+			</span>
+		</div>
+	</div>
+	<div class="row" style="margin: 15px 0px 0px 0px">
+		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-2"></div>
+		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 text-right" style="margin-top: 5px">
 			<span>Amount of sequences :</span>
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -214,9 +230,9 @@
 			<span class="errorTipHide">* Please input a positive integer</span>
 		</div>
 	</div>
-	<div class="row" style="margin-left: 0px; margin-right: 0px; margin-top: 15px">
+	<div class="row" style="margin: 15px 0px 0px 0px">
 		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-2"></div>
-		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 text-right">
+		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 text-right" style="margin-top: 5px">
 			<span>Length of a sequence :</span>
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -228,10 +244,10 @@
 	</div>
 	<div class="row" style="margin: 15px 0px 0px 0px">
 		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-2"></div>
-		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 text-right">
+		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 text-right" style="margin-top: 5px">
 			<span>Block length of frequency test within a block :</span>
 		</div>
-		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: 5px">
 			<span style="display: inline-block; margin-bottom: 10px">
 				<input type="text" class="form-control" name="blockLengthOfFTWAB" id="blockLengthOfFTWAB" style="color: black" placeholder="Input block length" value="10000"/>
 			</span>
@@ -385,7 +401,7 @@
 	// Verify input and give error tips
 	function veryfyInput() {
 		var value = $(this).val();
-		var isPositveInteger= testPositiveInteger(value);
+		var isPositveInteger = testPositiveInteger(value);
 		if (!isPositveInteger) {
 			$(this).removeClass('form-control');
 			$(this).addClass('customErrorInput');
@@ -406,6 +422,7 @@
 		var amount = document.getElementById("amount").value;
 		var length = document.getElementById("length").value;
 		var blockLengthOfFTWAB = document.getElementById("blockLengthOfFTWAB").value;
+		var fileType = $("input[name='type']:checked").val();
 		var isSelected = new Object();
 		isSelected.frequencyTest = document.getElementById("frequencyTest").checked === true ? 1 : 0;
 		isSelected.frequencyTestWithinABlock = document.getElementById("frequencyTestWithinABlock").checked === true ? 1 : 0;
@@ -455,6 +472,7 @@
 			amount: parseInt(amount),
 			length: parseInt(length),
 			blockLengthOfFTWAB: parseInt(blockLengthOfFTWAB),
+			fileType: parseInt(fileType),
 			testCount: parseInt(testCount),
 			isSelected: isSelected,
 			start: ""

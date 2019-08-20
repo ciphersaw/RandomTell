@@ -4,14 +4,19 @@
 from functions.tests import *
 
 def start_random_tell(file_path):
-	with open(file_path, 'r') as file:
-		read_in_ascii_format(file)
+	file_type = get_value('file_type')
+	if file_type == 0:
+		with open(file_path, 'r') as file:
+			read_in_ascii_format(file)
+	elif file_type == 1:
+		with open(file_path, 'rb') as file:
+			read_in_binary_format(file)
 
 def read_in_ascii_format(file):
 	amount = get_value('amount')
 	length = get_value('length')
 	epsilon = get_value('epsilon')
-	for i in range(amount):	
+	for i in range(amount):
 		j = 0
 		while 1:
 			bit = file.read(1)
@@ -31,6 +36,36 @@ def read_in_ascii_format(file):
 					set_value('error_code', 102)
 					return
 			if j == length:
+				break
+		test_suite()
+		del epsilon[:]
+	results_of_p_value_distribution()
+	results_of_pass_rate()
+
+def read_in_binary_format(file):
+	amount = get_value('amount')
+	length = get_value('length')
+	epsilon = get_value('epsilon')
+	temp = []
+	for i in range(amount):
+		j = 0
+		for k in temp:
+			epsilon.append(k)
+		del temp[:]
+		while 1:
+			char = file.read(1)
+			if len(char) == 0:
+				# Lack of data to read.
+				del epsilon[:]
+				set_value('error_code', 102)
+				return
+			for k in range(7, -1, -1):
+				epsilon.append(ord(char) >> k & 1)
+			j += 8
+			if j >= length:
+				remain = j - length
+				if remain:
+					temp = epsilon[-remain:]
 				break
 		test_suite()
 		del epsilon[:]
