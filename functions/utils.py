@@ -5,12 +5,15 @@ from functions.tests import *
 
 def start_random_tell(file_path):
 	file_type = get_value('file_type')
-	if file_type == 0:
-		with open(file_path, 'r') as file:
-			read_in_ascii_format(file)
-	elif file_type == 1:
-		with open(file_path, 'rb') as file:
-			read_in_binary_format(file)
+	try:
+		if file_type == 0:
+			with open(file_path, 'r') as file:
+				read_in_ascii_format(file)
+		elif file_type == 1:
+			with open(file_path, 'rb') as file:
+				read_in_binary_format(file)
+	except ValueError:
+		set_value('error_code', 401)
 
 def read_in_ascii_format(file):
 	amount = get_value('amount')
@@ -29,11 +32,11 @@ def read_in_ascii_format(file):
 				del epsilon[:]
 				if len(bit) == 1:
 					# Read an illegal character except '0', '1' or '\n'.
-					set_value('error_code', 101)
+					set_value('error_code', 301)
 					return
 				else:
 					# Lack of data to read.
-					set_value('error_code', 102)
+					set_value('error_code', 302)
 					return
 			if j == length:
 				break
@@ -48,7 +51,7 @@ def read_in_binary_format(file):
 	epsilon = get_value('epsilon')
 	temp = []
 	for i in range(amount):
-		j = 0
+		j = len(temp)
 		for k in temp:
 			epsilon.append(k)
 		del temp[:]
@@ -57,7 +60,7 @@ def read_in_binary_format(file):
 			if len(char) == 0:
 				# Lack of data to read.
 				del epsilon[:]
-				set_value('error_code', 102)
+				set_value('error_code', 302)
 				return
 			for k in range(7, -1, -1):
 				epsilon.append(ord(char) >> k & 1)
@@ -66,6 +69,7 @@ def read_in_binary_format(file):
 				remain = j - length
 				if remain:
 					temp = epsilon[-remain:]
+					epsilon = epsilon[0:-remain]
 				break
 		test_suite()
 		del epsilon[:]

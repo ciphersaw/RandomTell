@@ -355,11 +355,14 @@
 						window.location.href = "http://" + window.location.host + "/result/pass_rate";
 					}, 1000
 				)
-			} else if (data.status === 101) {
+			} else if (data.status === 301) {
 				var errorInfo = 'The uploaded file contains an illegal character except 0, 1 or \\n.';
 				updateErrorInfo(errorInfo);
-			} else if (data.status === 102) {
+			} else if (data.status === 302) {
 				var errorInfo = 'The uploaded file is not long enough.';
+				updateErrorInfo(errorInfo);
+			} else if (data.status === 401) {
+				var errorInfo = 'Value error happened in processing.';
 				updateErrorInfo(errorInfo);
 			} else {
 				var errorInfo = 'Something wrong when tesing.';
