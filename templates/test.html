@@ -227,7 +227,7 @@
 			<span style="display: inline-block">
 				<input type="text" class="form-control" name="amount" id="amount" style="color: black" placeholder="Input amount" value="10"/>
 			</span>
-			<span class="errorTipHide">* Please input a positive integer</span>
+			<span id="amtError" class="errorTipHide"></span>
 		</div>
 	</div>
 	<div class="row" style="margin: 15px 0px 0px 0px">
@@ -239,19 +239,19 @@
 			<span style="display: inline-block">
 				<input type="text" class="form-control" name="length" id="length" style="color: black" placeholder="Input length" value="100000"/>
 			</span>
-			<span class="errorTipHide">* Please input a positive integer</span>
+			<span id="lenError" class="errorTipHide"></span>
 		</div>
 	</div>
 	<div class="row" style="margin: 15px 0px 0px 0px">
 		<div class="col-xs-1 col-sm-1 col-md-1 col-lg-2"></div>
 		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-4 text-right" style="margin-top: 5px">
-			<span>Block length of frequency test within a block :</span>
+			<span>Block length of frequency test within a block (BL-BFT) :</span>
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="margin-bottom: 5px">
 			<span style="display: inline-block; margin-bottom: 10px">
 				<input type="text" class="form-control" name="blockLengthOfFTWAB" id="blockLengthOfFTWAB" style="color: black" placeholder="Input block length" value="10000"/>
 			</span>
-			<span class="errorTipHide">* Please input a positive integer</span>
+			<span id="blkFreLenError" class="errorTipHide"></span>
 		</div>
 	</div>
 </div>
@@ -401,21 +401,88 @@
 		return reg.test(str);
 	}
 
+	// Display error tip when invalid input appears
+	function displayErrorTip(inputId, spanId, errorTip) {
+		$('#' + inputId).removeClass('form-control');
+		$('#' + inputId).addClass('customErrorInput');
+		$('#' + inputId).parent().next().removeClass('errorTipHide');
+		$('#' + inputId).parent().next().addClass('errorTipDisplay');
+		$('#' + spanId).html(errorTip)
+	}
+
+	// Remove error tip when invalid input disappears
+	function removeErrorTip(inputId, spanId) {
+		$('#' + inputId).removeClass('customErrorInput');
+		$('#' + inputId).addClass('form-control');
+		$('#' + inputId).parent().next().removeClass('errorTipDisplay');
+		$('#' + inputId).parent().next().addClass('errorTipHide');
+		$('#' + spanId).html('')
+	}
+
 	// Verify input and give error tips
-	function veryfyInput() {
-		var value = $(this).val();
-		var isPositveInteger = testPositiveInteger(value);
+	function veryfyAmount() {
+		var amount = $('#amount').val();
+		var isPositveInteger = testPositiveInteger(amount);
 		if (!isPositveInteger) {
-			$(this).removeClass('form-control');
-			$(this).addClass('customErrorInput');
-			$(this).parent().next().removeClass('errorTipHide');
-			$(this).parent().next().addClass('errorTipDisplay');
-		} else {
-			$(this).removeClass('customErrorInput');
-			$(this).addClass('form-control');
-			$(this).parent().next().removeClass('errorTipDisplay');
-			$(this).parent().next().addClass('errorTipHide');
+			displayErrorTip('amount', 'amtError', '* Please input a positive integer');
 		}
+		else {
+			removeErrorTip('amount', 'amtError');
+			return true;
+		}
+		return false;
+	}
+
+	function veryfyLength() {
+		var length = $('#length').val();
+		var blockLength = $('#blockLengthOfFTWAB').val();
+		var isPositveIntegerL = testPositiveInteger(length);
+		var isPositveIntegerBL =testPositiveInteger(blockLength);
+		if (!isPositveIntegerL || !isPositveIntegerBL) {
+			if (!isPositveIntegerL)
+				displayErrorTip('length', 'lenError', '* Please input a positive integer');
+			else
+				removeErrorTip('length', 'lenError');
+			if (!isPositveIntegerBL) 
+				displayErrorTip('blockLengthOfFTWAB', 'blkFreLenError', '* Please input a positive integer');
+			else
+				removeErrorTip('blockLengthOfFTWAB', 'blkFreLenError');
+		} else if (parseInt(length) < parseInt(blockLength)) {
+			displayErrorTip('length', 'lenError', '* Length must be not less than BL-BFT');
+			displayErrorTip('blockLengthOfFTWAB', 'blkFreLenError', '* BL-BFT must be not greater than Length');
+		} else {
+			removeErrorTip('length', 'lenError');
+			removeErrorTip('blockLengthOfFTWAB', 'blkFreLenError');
+			return true;
+		}
+		return false;
+	}
+
+	function veryfyBlockLengthOfFTWAB() {
+		var length = $('#length').val();
+		var blockLength = $('#blockLengthOfFTWAB').val();
+		var isPositveIntegerL = testPositiveInteger(length);
+		var isPositveIntegerBL =testPositiveInteger(blockLength);
+		if (!isPositveIntegerBL || !isPositveIntegerL) {
+			if (!isPositveIntegerBL) {
+				displayErrorTip('blockLengthOfFTWAB', 'blkFreLenError', '* Please input a positive integer');
+			} else {
+				removeErrorTip('blockLengthOfFTWAB', 'blkFreLenError');
+			}
+			if (!isPositveIntegerL) {
+				displayErrorTip('length', 'lenError', '* Please input a positive integer');
+			} else {
+				removeErrorTip('length', 'lenError');
+			}
+		} else if (parseInt(length) < parseInt(blockLength)) {
+			displayErrorTip('length', 'lenError', '* Length must be not less than BL-BFT');
+			displayErrorTip('blockLengthOfFTWAB', 'blkFreLenError', '* BL-BFT must be not greater than Length');
+		} else {
+			removeErrorTip('length', 'lenError');
+			removeErrorTip('blockLengthOfFTWAB', 'blkFreLenError');
+			return true;
+		}
+		return false;
 	}
 
 	// Handle params to be upload
@@ -452,25 +519,15 @@
 			var warningContent = '';
 			$("#prompt-container").html(warningContent);
 		}
-		// If no input parameters in step 3, give tips
-		if (!amount || !testPositiveInteger(amount)) {
-			$('#amount').addClass('customErrorInput');
-			$('#amount').parent().next().addClass('errorTipDisplay');
+		// If invalid input appears in step 3, give tips
+		if (!amount || !testPositiveInteger(amount) || !veryfyAmount())
 			checkFlag = 1;
-		};
-		if (!length || !testPositiveInteger(length)) {
-			$('#length').addClass('customErrorInput');
-			$('#length').parent().next().addClass('errorTipDisplay');
+		if (!length || !testPositiveInteger(length) || !veryfyLength())
 			checkFlag = 1;
-		};
-		if (!blockLengthOfFTWAB || !testPositiveInteger(blockLengthOfFTWAB)) {
-			$('#blockLengthOfFTWAB').addClass('customErrorInput');
-			$('#blockLengthOfFTWAB').parent().next().addClass('errorTipDisplay');
+		if (!blockLengthOfFTWAB || !testPositiveInteger(blockLengthOfFTWAB) || !veryfyBlockLengthOfFTWAB())
 			checkFlag = 1;
-		};
-		if (checkFlag) {
+		if (checkFlag)
 			return false;
-		}
 		var postData = {
 			amount: parseInt(amount),
 			length: parseInt(length),
@@ -534,9 +591,9 @@
 			}
 		});
 		// Event listener in step3
-		$('#amount').on('input', veryfyInput);
-		$('#length').on('input', veryfyInput);
-		$('#blockLengthOfFTWAB').on('input', veryfyInput);
+		$('#amount').on('input', veryfyAmount);
+		$('#length').on('input', veryfyLength);
+		$('#blockLengthOfFTWAB').on('input', veryfyBlockLengthOfFTWAB);
 	});
 </script>
 {% endblock %}
